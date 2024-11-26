@@ -1,13 +1,13 @@
-import { Link } from 'react-router-dom';
 import { useStoreOfProducts } from '../store';
+import { HeaderNav } from './HeaderNav';
+
 
 export const Header= () => {
   const products = useStoreOfProducts((state) => state.products);
   const shoppingCartCount = products.reduce((sum, product) => sum + product.count, 0)
   return (
-    <header className="header">
-      HEADER
-      
+    <header>
+      <HeaderNav />
     </header>
   );
 }
