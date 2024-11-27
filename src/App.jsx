@@ -1,29 +1,23 @@
 import * as React from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import useMediaQuery from '@mui/material/useMediaQuery';
-
-import { useRoutes } from 'react-router-dom';
-import { Routes, Route } from 'react-router-dom';
-import { ProductsCatalogPage } from './pages/ProductsCatalogPage';
-import { ShoppingCartPage } from './pages/ShoppingCartPage';
-import { NoMatch } from './components/NoMatch';
-import { Layout } from './components/Layout';
+// import Box from '@mui/material/Box';
+// import useMediaQuery from '@mui/material/useMediaQuery';
 import { useEffect } from 'react';
 import { useStoreOfProducts } from './store';
+
+import { useRoutes } from 'react-router-dom';
+import { NoMatch } from './components/NoMatch';
+import { Layout } from './components/Layout';
 import { HomePage } from './pages/HomePage';
-
-
-
-
-export const SimpleMediaQuery = () => {
-  const matches = useMediaQuery('(min-width:600px)'); // Если true, то ширина более 600 px
-  const color = matches ? 'red':'blue';
-  return <span style={{color}}>{`(min-width:600px) matches: ${matches}`}</span>;
-}
-
-
+import { LogsPage } from './pages/LogsPage';
+import { CardTypesPage } from './pages/CardTypesPage';
+import { ClientsPage } from './pages/ClientsPage';
+import { SessionsPage } from './pages/SessionsPage';
+import { ClubCardsPage } from './pages/ClubCardsPage';
+import { InstructorsPage } from './pages/InstructorsPage';
+import { MembershipsPage } from './pages/MembershipsPage';
+import { MembershipTypesPage } from './pages/MembershipTypesPage';
 
 export const App = () => {
   // const loadFromSessionStorage = useStoreOfProducts(state => state.loadFromSessionStorage);
@@ -39,7 +33,14 @@ export const App = () => {
       element: <Layout />,
       children: [
         { index: true, element: <HomePage /> },
-        { path: '/shoppingcart', element: <ShoppingCartPage />, },
+        { path: '/logs', element: <LogsPage />, },
+        { path: '/cardtypes', element: <CardTypesPage />, },
+        { path: '/clients', element: <ClientsPage />, },
+        { path: '/sessions', element: <SessionsPage />, },
+        { path: '/clubcards', element: <ClubCardsPage />, },
+        { path: '/instructors', element: <InstructorsPage />, },
+        { path: '/memberships', element: <MembershipsPage />, },
+        { path: '/membershiptypes', element: <MembershipTypesPage />, },
         { path: '*', element: <NoMatch /> },
       ],
     },
@@ -47,13 +48,8 @@ export const App = () => {
 
   let element = useRoutes(routes);
 
-
   return (
     <Container maxWidth="lg">
-      <Box sx={{ my: 4 }}>
-        <SimpleMediaQuery />
-      </Box>
-
       {element}
     </Container>
   );
