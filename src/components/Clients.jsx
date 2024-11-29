@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Typography } from '@mui/material';
+import { useStoreOfYogaClub, getAllClientsSelector } from './store';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
@@ -13,86 +14,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import Tooltip from '@mui/material/Tooltip';
-
-const data = {
-  "result": [
-    {
-      "client_id": "1",
-      "first_name": "Иван",
-      "last_name": "Петров",
-      "phone_number": "+7(920)753-89-56",
-      "email": "ivan@mail.ru",
-      "date_of_birth": "2024-10-01T13:32:51.000Z",
-      "registration_date": "2024-10-08T13:32:58.000Z",
-      "status": "активный",
-      "createdAt": "2024-10-16T13:32:02.000Z",
-      "updatedAt": "2024-10-16T13:32:05.000Z"
-    },
-    {
-      "client_id": "2",
-      "first_name": "Марк",
-      "last_name": "Ливанов",
-      "phone_number": "+7(997)363-27-55",
-      "email": "livanov.mark@mail.com",
-      "date_of_birth": "2024-10-01T13:32:51.000Z",
-      "registration_date": "2024-10-08T13:32:58.000Z",
-      "status": "активный",
-      "createdAt": "2024-10-16T13:32:02.000Z",
-      "updatedAt": "2024-10-16T13:32:05.000Z"
-    },
-    {
-      "client_id": "4",
-      "first_name": "Анна",
-      "last_name": "Сидорова",
-      "phone_number": "+7(987)654-32-10",
-      "email": "sidorova.anna@gmail.com",
-      "date_of_birth": "2024-10-01T13:32:51.000Z",
-      "registration_date": "2024-10-08T13:32:58.000Z",
-      "status": "активный",
-      "createdAt": "2024-10-16T13:32:02.000Z",
-      "updatedAt": "2024-10-16T13:32:05.000Z"
-    },
-    {
-      "client_id": "3",
-      "first_name": "Елена2 ",
-      "last_name": "Вольская",
-      "phone_number": "+7(912)345-67-89",
-      "email": "volskaya@mail.com",
-      "date_of_birth": "2024-10-01T13:32:51.000Z",
-      "registration_date": "2024-10-08T13:32:58.000Z",
-      "status": null,
-      "createdAt": "2024-10-16T13:32:02.000Z",
-      "updatedAt": "2024-10-16T13:32:05.000Z"
-    },
-    {
-      "client_id": "46",
-      "first_name": "F00000000",
-      "last_name": "L000000000000",
-      "phone_number": "+7(777) 111-11-22",
-      "email": "test@test.com",
-      "date_of_birth": "2023-10-01T02:32:51.000Z",
-      "registration_date": "2024-10-01T02:32:51.000Z",
-      "status": "active",
-      "createdAt": "2024-11-06T08:14:02.455Z",
-      "updatedAt": "2024-11-06T09:05:41.232Z"
-    },
-    {
-      "client_id": "41",
-      "first_name": "F00000000",
-      "last_name": "L000000000000",
-      "phone_number": "+7(777) 111-11-22",
-      "email": "test@test.com",
-      "date_of_birth": "2023-10-01T02:32:51.000Z",
-      "registration_date": "2024-10-01T02:32:51.000Z",
-      "status": "active",
-      "createdAt": "2024-10-16T13:32:02.000Z",
-      "updatedAt": "2024-11-06T09:16:53.985Z"
-    }
-  ],
-  "error": ""
-}
-
+import { deleteClient } from './store';
 export const Clients = () => {
+  const clients = useStoreOfYogaClub(getAllClientsSelector);
+
+  // const deleteClient = useStoreOfYogaClub((state) => state.deleteClient);
+  // console.log('**********************');
+  // console.log(deleteClient);
+  // console.log(typeof deleteClient);
+  // deleteClient(46);
 
   return (
     <Container>
@@ -117,7 +47,7 @@ export const Clients = () => {
         </Tooltip>
       </Typography>
 
-      {data.result.map((client) => (
+      { clients.map((client) => (
         <Box key={client.client_id}
          sx={{ 
           flexGrow: 1,
@@ -168,11 +98,16 @@ export const Clients = () => {
                   <EditIcon onClick={() => console.log('clicked EditIcon ' + client.client_id)}/>
                 </Fab>
               </Tooltip>
+
+
               <Tooltip title="Удалить...">
                 <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890'}}>
-                  <DeleteIcon onClick={() => console.log('clicked DeleteIcon ' + client.client_id)}/>
+                  <DeleteIcon onClick={() => deleteClient(client.client_id)}/>
+                  {/* <DeleteIcon onClick={() => console.log('clicked DeleteIcon ' + client.client_id)}/> */}
                 </Fab>
               </Tooltip>
+
+
               <Tooltip title="Подробнее...">
                 <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b'}}>
                   <SendIcon onClick={() => console.log('clicked SendIcon ' + client.client_id)}/>

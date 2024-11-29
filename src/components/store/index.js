@@ -1,0 +1,132 @@
+import { create } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
+import { devtools } from 'zustand/middleware';
+
+export const useStoreOfYogaClub = create(devtools(immer((set) => ({
+  clients: {
+    "result": [
+      {
+        "client_id": "1",
+        "first_name": "Иван",
+        "last_name": "Петров",
+        "phone_number": "+7(920)753-89-56",
+        "email": "ivan@mail.ru",
+        "date_of_birth": "2024-10-01T13:32:51.000Z",
+        "registration_date": "2024-10-08T13:32:58.000Z",
+        "status": "активный",
+        "createdAt": "2024-10-16T13:32:02.000Z",
+        "updatedAt": "2024-10-16T13:32:05.000Z"
+      },
+      {
+        "client_id": "2",
+        "first_name": "Марк",
+        "last_name": "Ливанов",
+        "phone_number": "+7(997)363-27-55",
+        "email": "livanov.mark@mail.com",
+        "date_of_birth": "2024-10-01T13:32:51.000Z",
+        "registration_date": "2024-10-08T13:32:58.000Z",
+        "status": "активный",
+        "createdAt": "2024-10-16T13:32:02.000Z",
+        "updatedAt": "2024-10-16T13:32:05.000Z"
+      },
+      {
+        "client_id": "4",
+        "first_name": "Анна",
+        "last_name": "Сидорова",
+        "phone_number": "+7(987)654-32-10",
+        "email": "sidorova.anna@gmail.com",
+        "date_of_birth": "2024-10-01T13:32:51.000Z",
+        "registration_date": "2024-10-08T13:32:58.000Z",
+        "status": "активный",
+        "createdAt": "2024-10-16T13:32:02.000Z",
+        "updatedAt": "2024-10-16T13:32:05.000Z"
+      },
+      {
+        "client_id": "3",
+        "first_name": "Елена2 ",
+        "last_name": "Вольская",
+        "phone_number": "+7(912)345-67-89",
+        "email": "volskaya@mail.com",
+        "date_of_birth": "2024-10-01T13:32:51.000Z",
+        "registration_date": "2024-10-08T13:32:58.000Z",
+        "status": null,
+        "createdAt": "2024-10-16T13:32:02.000Z",
+        "updatedAt": "2024-10-16T13:32:05.000Z"
+      },
+      {
+        "client_id": "46",
+        "first_name": "F00000000",
+        "last_name": "L000000000000",
+        "phone_number": "+7(777) 111-11-22",
+        "email": "test@test.com",
+        "date_of_birth": "2023-10-01T02:32:51.000Z",
+        "registration_date": "2024-10-01T02:32:51.000Z",
+        "status": "active",
+        "createdAt": "2024-11-06T08:14:02.455Z",
+        "updatedAt": "2024-11-06T09:05:41.232Z"
+      },
+      {
+        "client_id": "41",
+        "first_name": "F00000000",
+        "last_name": "L000000000000",
+        "phone_number": "+7(777) 111-11-22",
+        "email": "test@test.com",
+        "date_of_birth": "2023-10-01T02:32:51.000Z",
+        "registration_date": "2024-10-01T02:32:51.000Z",
+        "status": "active",
+        "createdAt": "2024-10-16T13:32:02.000Z",
+        "updatedAt": "2024-11-06T09:16:53.985Z"
+      }
+    ],
+    "error": ""
+  },
+
+}))))
+
+export const deleteClient = (clientId) => {
+    const state = useStoreOfYogaClub.getState();
+    const filteredResult = state.clients.result.filter((client) => client.client_id !== clientId)
+    useStoreOfYogaClub.setState({clients: {result: filteredResult, error:''}})
+}
+
+export const getAllClientsSelector = (state) => state.clients.result;
+
+// export const deleteClientByIdSelector = (state) => state.clients.................
+
+
+
+
+
+// const useStore = create((set) => ({
+//   bears: 0,
+//   increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
+//   removeAllBears: () => set({ bears: 0 }),
+//   updateBears: (newBears) => set({ bears: newBears }),
+// }))
+
+/*
+
+
+import create from "zustand";
+const useStore = create((set) => ({
+pokemons: [{ id: 1, name: "Bulbasaur" },
+ { id: 2, name: "Ivysaur" },
+ { id: 3, name: "Venusaur" },
+ { id: 4, name: "Charmander" },
+ { id: 5, name: "Charmeleon" },
+],
+addPokemons: (pokemon) =>
+set((state) => ({
+ pokemons: [
+ { name: pokemon.name, id: Math.random() * 100 },
+  ...state.pokemons,
+ ]})),
+removePokemon: (id) =>
+ set((state) => ({
+   pokemons: state.pokemons.filter((pokemon) => pokemon.id !== id),
+ })),
+}));
+export default useStore;
+
+
+*/
