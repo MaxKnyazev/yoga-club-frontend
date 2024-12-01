@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Typography } from '@mui/material';
-import { useStoreOfYogaClub, getAllClientsSelector } from './store';
+import { useStoreOfYogaClub, getAllClientsSelector } from '../store';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
@@ -14,10 +14,20 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import Tooltip from '@mui/material/Tooltip';
-import { deleteClient } from './store';
+import { deleteClient } from '../store';
+import { ClientModal } from './ClientModal';
 export const Clients = () => {
   const clients = useStoreOfYogaClub(getAllClientsSelector);
 
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+const options = {
+  open,
+  handleOpen,
+  handleClose,
+}
   // const deleteClient = useStoreOfYogaClub((state) => state.deleteClient);
   // console.log('**********************');
   // console.log(deleteClient);
@@ -98,27 +108,31 @@ export const Clients = () => {
                   <EditIcon onClick={() => console.log('clicked EditIcon ' + client.client_id)}/>
                 </Fab>
               </Tooltip>
-
-
               <Tooltip title="Удалить...">
                 <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890'}}>
                   <DeleteIcon onClick={() => deleteClient(client.client_id)}/>
-                  {/* <DeleteIcon onClick={() => console.log('clicked DeleteIcon ' + client.client_id)}/> */}
                 </Fab>
               </Tooltip>
+
 
 
               <Tooltip title="Подробнее...">
                 <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b'}}>
-                  <SendIcon onClick={() => console.log('clicked SendIcon ' + client.client_id)}/>
+                  <SendIcon onClick={handleOpen}/>
                 </Fab>
               </Tooltip>
+
+
+
             </Grid>
           </Grid>
         </Box>
       ))}
 
+      <ClientModal {...options}/>
     </Container>
+
+
   );
 };
 

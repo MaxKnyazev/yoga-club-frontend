@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 // import Box from '@mui/material/Box';
 // import useMediaQuery from '@mui/material/useMediaQuery';
 import { useEffect } from 'react';
-import { useStoreOfProducts } from './store';
+// import { useStoreOfProducts } from './store';
 
 import { useRoutes } from 'react-router-dom';
 import { NoMatch } from './components/NoMatch';
