@@ -5,6 +5,137 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+// import { CardTypesPage } from '../pages/CardTypesPage';//+
+import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+
+export const ClientModal = (options) => {
+  const [formData, setFormData] = React.useState({
+    textField1: '',
+    textField2: '',
+    dateTime: '',
+    selectedName: '',
+  });
+  
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+  
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const names = ['Иван', 'Мария', 'Петр', 'Анна', 'Сергей'];
+
+  return (
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      open={options.open}
+      onClose={options.handleClose}
+      closeAfterTransition
+      slots={{ backdrop: Backdrop }}
+      slotProps={{
+        backdrop: {
+          timeout: 500,
+        },
+      }}
+    >
+      <Fade in={options.open}>
+        <Box sx={style}>
+          <Typography id="transition-modal-title" variant="h6" component="h2">
+            Client Form
+          </Typography>
+          <Box component="form" sx={{ mt: 2 }}>
+            <TextField
+              fullWidth
+              margin="normal"
+              name="textField1"
+              label="Text Field 1"
+              value={formData.textField1}
+              onChange={handleChange}
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              name="textField2"
+              label="Text Field 2"
+              value={formData.textField2}
+              onChange={handleChange}
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              name="dateTime"
+              label="Date and Time"
+              type="datetime-local"
+              value={formData.dateTime}
+              onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="name-select-label">Select Name</InputLabel>
+              <Select
+                labelId="name-select-label"
+                name="selectedName"
+                value={formData.selectedName}
+                onChange={handleChange}
+                label="Select Name"
+              >
+                {names.map((name) => (
+                  <MenuItem key={name} value={name}>{name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button variant="contained" sx={{ mt: 2 }}>Submit</Button>
+          </Box>
+        </Box>
+      </Fade>
+    </Modal>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+import * as React from 'react';
+import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import { CardTypesPage } from '../pages/CardTypesPage';
 
 const style = {
@@ -67,4 +198,19 @@ export const ClientModal = (options) => {
         </Fade>
       </Modal>
   );
-}
+}import * as React from 'react';
+import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import { CardTypesPage } from '../pages/CardTypesPage';
+import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+
+
+*/
