@@ -5,14 +5,14 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-// import { CardTypesPage } from '../pages/CardTypesPage';//+
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 
-export const ClientModal = (options) => {
+export const ClientModal = ({open, handleClose}) => {
+  
   const [formData, setFormData] = React.useState({
     textField1: '',
     textField2: '',
@@ -42,12 +42,17 @@ export const ClientModal = (options) => {
 
   const names = ['Иван', 'Мария', 'Петр', 'Анна', 'Сергей'];
 
+  const onChangeSubmit = () => {
+    console.log(formData);
+    handleClose();
+  }
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
-      open={options.open}
-      onClose={options.handleClose}
+      open={open}
+      onClose={handleClose}
       closeAfterTransition
       slots={{ backdrop: Backdrop }}
       slotProps={{
@@ -56,7 +61,7 @@ export const ClientModal = (options) => {
         },
       }}
     >
-      <Fade in={options.open}>
+      <Fade in={open}>
         <Box sx={style}>
           <Typography id="transition-modal-title" variant="h6" component="h2">
             Client Form
@@ -82,11 +87,11 @@ export const ClientModal = (options) => {
               fullWidth
               margin="normal"
               name="dateTime"
-              label="Date and Time"
+              // label="Date and Time"
               type="datetime-local"
               value={formData.dateTime}
               onChange={handleChange}
-              InputLabelProps={{
+              inputLabel={{
                 shrink: true,
               }}
             />
@@ -104,7 +109,11 @@ export const ClientModal = (options) => {
                 ))}
               </Select>
             </FormControl>
-            <Button variant="contained" sx={{ mt: 2 }}>Submit</Button>
+            <Button
+             variant="contained" 
+             sx={{ mt: 2 }}
+             onClick={onChangeSubmit}
+            >Submit</Button>
           </Box>
         </Box>
       </Fade>

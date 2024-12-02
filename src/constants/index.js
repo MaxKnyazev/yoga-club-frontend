@@ -1,0 +1,1 @@
+export const BASE_URL = 'https://maxknyazev-yoga-club-backend-64c9.twc1.net';

@@ -16,18 +16,31 @@ import SendIcon from '@mui/icons-material/Send';
 import Tooltip from '@mui/material/Tooltip';
 import { deleteClient } from '../store';
 import { ClientModal } from './ClientModal';
+import { ClientModalInfo } from './ClientModalInfo';
 export const Clients = () => {
   const clients = useStoreOfYogaClub(getAllClientsSelector);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  
+    const options = {
+      open,
+      handleClose,
+    }
 
-const options = {
-  open,
-  handleOpen,
-  handleClose,
-}
+  const [openInfo, setOpenInfo] = React.useState(false);
+  const handleOpenInfo = () => setOpenInfo(true);
+  const handleCloseInfo = () => setOpenInfo(false);
+
+  const optionsInfo = {
+    openInfo,
+    handleCloseInfo,
+  }
+
+
+
+
   // const deleteClient = useStoreOfYogaClub((state) => state.deleteClient);
   // console.log('**********************');
   // console.log(deleteClient);
@@ -118,7 +131,7 @@ const options = {
 
               <Tooltip title="Подробнее...">
                 <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b'}}>
-                  <SendIcon onClick={handleOpen}/>
+                  <SendIcon onClick={handleOpenInfo}/>
                 </Fab>
               </Tooltip>
 
@@ -129,7 +142,10 @@ const options = {
         </Box>
       ))}
 
-      <ClientModal {...options}/>
+      {/* <ClientModal {...options}/>*/}
+
+      <ClientModalInfo {...optionsInfo}/>
+
     </Container>
 
 
