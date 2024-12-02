@@ -17,8 +17,14 @@ import Tooltip from '@mui/material/Tooltip';
 import { deleteClient } from '../store';
 import { ClientModal } from './ClientModal';
 import { ClientModalInfo } from './ClientModalInfo';
+
+
+import { getClients } from '../store';
+
 export const Clients = () => {
   const clients = useStoreOfYogaClub(getAllClientsSelector);
+
+  const [client, setClient] = React.useState({});
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -30,16 +36,20 @@ export const Clients = () => {
     }
 
   const [openInfo, setOpenInfo] = React.useState(false);
-  const handleOpenInfo = () => setOpenInfo(true);
+  const handleOpenInfo = (client) => {
+    setClient(client);
+    setOpenInfo(true);
+  }
   const handleCloseInfo = () => setOpenInfo(false);
 
   const optionsInfo = {
     openInfo,
     handleCloseInfo,
+    client,
   }
 
 
-
+  getClients();
 
   // const deleteClient = useStoreOfYogaClub((state) => state.deleteClient);
   // console.log('**********************');
@@ -131,7 +141,7 @@ export const Clients = () => {
 
               <Tooltip title="Подробнее...">
                 <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b'}}>
-                  <SendIcon onClick={handleOpenInfo}/>
+                  <SendIcon onClick={() => handleOpenInfo(client)}/>
                 </Fab>
               </Tooltip>
 
@@ -140,11 +150,12 @@ export const Clients = () => {
             </Grid>
           </Grid>
         </Box>
+
       ))}
 
       {/* <ClientModal {...options}/>*/}
-
       <ClientModalInfo {...optionsInfo}/>
+
 
     </Container>
 

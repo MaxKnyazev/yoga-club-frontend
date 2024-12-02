@@ -85,9 +85,62 @@ export const useStoreOfYogaClub = create(devtools(immer((set) => ({
 
 export const deleteClient = (clientId) => {
     const state = useStoreOfYogaClub.getState();
-    const filteredResult = state.clients.result.filter((client) => client.client_id !== clientId)
+    const filteredResult = state.clients.result.filter((client) => client.client_id !== clientId);
     useStoreOfYogaClub.setState({clients: {result: filteredResult, error:''}})
 }
+
+export const getClients = async () => {
+    const state = useStoreOfYogaClub.getState();
+    const response = await fetch('https://maxknyazev-yoga-club-backend-64c9.twc1.net/clients');
+    const clients = await response.json()
+    console.log(clients)
+    // console.log(response)
+
+    // const filteredResult = state.clients.result.filter((client) => client.client_id !== clientId);   
+    // useStoreOfYogaClub.setState({clients: {result: filteredResult, error:''}})
+}
+
+
+/**
+ * 
+ * Access-Control-Allow-Origin: *
+ * 
+ * 
+ * import axios from "axios";
+const useStore = create(set => ({
+  pokemons: [],
+  getPokemons: async ()=> {
+    const response = await axios.get('')
+    set({ pokemons: response.data })
+  }
+}))
+
+
+let promise = fetch(url, {
+  method: "GET", // POST, PUT, DELETE, etc.
+  headers: {
+    // значение этого заголовка обычно ставится автоматически,
+    // в зависимости от тела запроса
+    "Content-Type": "text/plain;charset=UTF-8"
+  },
+  body: undefined, // string, FormData, Blob, BufferSource или URLSearchParams
+  referrer: "about:client", // или "" для того, чтобы не послать заголовок Referer,
+  // или URL с текущего источника
+  referrerPolicy: "strict-origin-when-cross-origin", // no-referrer-when-downgrade, no-referrer, origin, same-origin...
+  mode: "cors", // same-origin, no-cors
+  credentials: "same-origin", // omit, include
+  cache: "default", // no-store, reload, no-cache, force-cache или only-if-cached
+  redirect: "follow", // manual, error
+  integrity: "", // контрольная сумма, например "sha256-abcdef1234567890"
+  keepalive: false, // true
+  signal: undefined, // AbortController, чтобы прервать запрос
+  window: window // null
+});
+
+
+
+ */
+
 
 export const getAllClientsSelector = (state) => state.clients.result;
 
