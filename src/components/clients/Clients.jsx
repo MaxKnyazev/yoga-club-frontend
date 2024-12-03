@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Typography } from '@mui/material';
-import { useStoreOfYogaClub, getAllClientsSelector } from '../store';
+import { useStoreOfYogaClub, getAllClientsSelector } from '../../store';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
@@ -14,12 +14,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import Tooltip from '@mui/material/Tooltip';
-import { deleteClient } from '../store';
+import { deleteClient } from '../../store';
 import { ClientModal } from './ClientModal';
 import { ClientModalInfo } from './ClientModalInfo';
 
 
-import { getClients } from '../store';
 
 export const Clients = () => {
   const clients = useStoreOfYogaClub(getAllClientsSelector);
@@ -49,7 +48,6 @@ export const Clients = () => {
   }
 
 
-  getClients();
 
   // const deleteClient = useStoreOfYogaClub((state) => state.deleteClient);
   // console.log('**********************');
@@ -75,7 +73,7 @@ export const Clients = () => {
         }}>
         <Tooltip title="Добавить...">
           <Fab color="primary" aria-label="add">
-            <AddIcon onClick={() => console.log('clicked AddIcon')}/>
+            <AddIcon onClick={handleOpen}/>
           </Fab>
         </Tooltip>
       </Typography>
@@ -126,19 +124,24 @@ export const Clients = () => {
              alignItems="center" 
              size={{ xs: 12, sm: 4, md: 2 }}
             >
+
+
+
+
               <Tooltip title="Изменить...">
                 <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee'}}>
                   <EditIcon onClick={() => console.log('clicked EditIcon ' + client.client_id)}/>
                 </Fab>
               </Tooltip>
+
+
+
+
               <Tooltip title="Удалить...">
                 <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890'}}>
                   <DeleteIcon onClick={() => deleteClient(client.client_id)}/>
                 </Fab>
               </Tooltip>
-
-
-
               <Tooltip title="Подробнее...">
                 <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b'}}>
                   <SendIcon onClick={() => handleOpenInfo(client)}/>
@@ -153,7 +156,7 @@ export const Clients = () => {
 
       ))}
 
-      {/* <ClientModal {...options}/>*/}
+      <ClientModal {...options}/>
       <ClientModalInfo {...optionsInfo}/>
 
 
@@ -163,12 +166,11 @@ export const Clients = () => {
   );
 };
 
+
+
+
+
 /*
-
-
-
-
-
 
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
