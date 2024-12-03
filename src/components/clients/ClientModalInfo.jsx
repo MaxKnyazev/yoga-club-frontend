@@ -6,7 +6,8 @@ import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import { InfoValue } from '../InfoValue';
 
-export const ClientModalInfo = ({openInfo, handleCloseInfo, client}) => {
+export const ClientModalInfo = ({openModalInfo, handleCloseModalInfo, client}) => { 
+  
   const style = {
     position: 'absolute',
     top: '50%',
@@ -23,8 +24,8 @@ export const ClientModalInfo = ({openInfo, handleCloseInfo, client}) => {
     <Modal
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
-      open={openInfo}
-      onClose={handleCloseInfo}
+      open={openModalInfo}
+      onClose={handleCloseModalInfo}
       closeAfterTransition
       slots={{ backdrop: Backdrop }}
       slotProps={{
@@ -33,7 +34,7 @@ export const ClientModalInfo = ({openInfo, handleCloseInfo, client}) => {
         },
       }}
     >
-      <Fade in={openInfo}>
+      <Fade in={openModalInfo}>
         <Box sx={style}>
           <Typography variant="h5" 
           sx={{

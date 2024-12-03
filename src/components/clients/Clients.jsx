@@ -15,7 +15,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import Tooltip from '@mui/material/Tooltip';
 import { deleteClient } from '../../store';
-import { ClientModal } from './ClientModal';
+import { ClientModalNewItem } from './ClientModalNewItem';
+import { ClientModalEditItem } from './ClientModalEditItem';
 import { ClientModalInfo } from './ClientModalInfo';
 
 
@@ -25,29 +26,40 @@ export const Clients = () => {
 
   const [client, setClient] = React.useState({});
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [openModalNewItem, setOpenModalNewItem] = React.useState(false);
+  const handleOpenModalNewItem = () => setOpenModalNewItem(true);
+  const handleCloseModalNewItem = () => setOpenModalNewItem(false);
   
-    const options = {
-      open,
-      handleClose,
-    }
-
-  const [openInfo, setOpenInfo] = React.useState(false);
-  const handleOpenInfo = (client) => {
-    setClient(client);
-    setOpenInfo(true);
+  const optionsModalNewItem = {
+    openModalNewItem,
+    handleCloseModalNewItem,
   }
-  const handleCloseInfo = () => setOpenInfo(false);
 
-  const optionsInfo = {
-    openInfo,
-    handleCloseInfo,
+  const [openModalInfo, setOpenModalInfo] = React.useState(false);
+  const handleOpenModalInfo = (client) => {
+    setClient(client);
+    setOpenModalInfo(true);
+  }
+  const handleCloseModalInfo = () => setOpenModalInfo(false);
+
+  const optionsModalInfo = {
+    openModalInfo,
+    handleCloseModalInfo,
     client,
   }
 
+  const [openModalEditItem, setOpenModalEditItem] = React.useState(false);
+  const handleOpenModalEditItem = (client) => {
+    setClient(client);//?????????????????????????????????????????
+    setOpenModalEditItem(true);
+  }
+  const handleCloseModalEditItem = () => setOpenModalEditItem(false);
 
+  const optionsModalEditItem = {
+    openModalEditItem,
+    handleCloseModalEditItem,
+    client,
+  }
 
   // const deleteClient = useStoreOfYogaClub((state) => state.deleteClient);
   // console.log('**********************');
@@ -73,7 +85,7 @@ export const Clients = () => {
         }}>
         <Tooltip title="Добавить...">
           <Fab color="primary" aria-label="add">
-            <AddIcon onClick={handleOpen}/>
+            <AddIcon onClick={handleOpenModalNewItem}/>
           </Fab>
         </Tooltip>
       </Typography>
@@ -130,7 +142,7 @@ export const Clients = () => {
 
               <Tooltip title="Изменить...">
                 <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee'}}>
-                  <EditIcon onClick={() => console.log('clicked EditIcon ' + client.client_id)}/>
+                  <EditIcon onClick={() => handleOpenModalEditItem(client)}/>
                 </Fab>
               </Tooltip>
 
@@ -144,26 +156,20 @@ export const Clients = () => {
               </Tooltip>
               <Tooltip title="Подробнее...">
                 <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b'}}>
-                  <SendIcon onClick={() => handleOpenInfo(client)}/>
+                  <SendIcon onClick={() => handleOpenModalInfo(client)}/>
                 </Fab>
               </Tooltip>
-
-
-
             </Grid>
           </Grid>
         </Box>
-
       ))}
 
-      <ClientModal {...options}/>
-      <ClientModalInfo {...optionsInfo}/>
-
+      <ClientModalNewItem {...optionsModalNewItem}/>
+      <ClientModalEditItem {...optionsModalEditItem}/>
+      <ClientModalInfo {...optionsModalInfo}/>
 
     </Container>
-
-
-  );
+  )
 };
 
 

@@ -11,7 +11,15 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 
-export const ClientModal = ({open, handleClose}) => {
+// openModalEditItem,
+// handleCloseModalEditItem,
+// client,
+
+export const ClientModalEditItem = ({openModalEditItem, handleCloseModalEditItem, client}) => { 
+
+console.log('client')
+console.log(client)
+
   const [formClient, setFormClient] = React.useState({
     first_name: '',
     last_name: '',
@@ -20,7 +28,24 @@ export const ClientModal = ({open, handleClose}) => {
     date_of_birth: '',
     registration_date: '',
     status: '',
-});
+  })
+
+// setTimeout(() => {
+//   setFormClient({...client})
+// }, 1000);
+
+  console.log('formClient')
+  console.log(formClient)
+  
+//   const [formClient, setFormClient] = React.useState({
+//     // first_name: client.first_name,
+//     // last_name: client.last_name,
+//     // phone_number: client.phone_number,
+//     // email: client.email,
+//     // date_of_birth: client.date_of_birth,
+//     // registration_date: client.registration_date,
+//     // status: client.status,
+// });
 
   //     {
   //       "client_id": "1",
@@ -49,24 +74,28 @@ export const ClientModal = ({open, handleClose}) => {
   
   const handleChange = (event) => {
     const { name, value } = event.target;
+    console.log(`----------- name = ${name} --------- value = ${value}`)
     setFormClient(prevData => ({
       ...prevData,
       [name]: value,
     }));
   };
 
+  // const handleInputChange = (event) => {
+  //   setFormClient({...formClient, [event.target.name]: event.target.value });
+  // };
+
+
   const statuses = ['активный', 'средний', 'начальный', 'специальный'];
 
-  const onChangeSubmit = (e) => {
-    e.preventDefault();
 
 
+  const onChangeSubmit = () => {
 
     // Проверка валидности полей
     /************************************ */
     //TODO: Условие на отправку формы ???
     /************************************ */
-    console.log(formClient);
     setFormClient({
       first_name: '',
       last_name: '',
@@ -75,16 +104,18 @@ export const ClientModal = ({open, handleClose}) => {
       date_of_birth: '',
       registration_date: '',
       status: '',
-  })
-    handleClose();
+    })
+    console.log('formClient**************************************');
+    console.log(formClient);
+    handleCloseModalEditItem();
   }
 
   return (
     <Modal
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
-      open={open}
-      onClose={handleClose}
+      open={openModalEditItem}
+      onClose={handleCloseModalEditItem}
       closeAfterTransition
       slots={{ backdrop: Backdrop }}
       slotProps={{
@@ -93,10 +124,10 @@ export const ClientModal = ({open, handleClose}) => {
         },
       }}
     >
-      <Fade in={open}>
+      <Fade in={openModalEditItem}>
         <Box sx={style}>
           <Typography id="transition-modal-title" variant="h6" component="h2">
-            Новый клиент:           
+            Внесите изменения:           
           </Typography>
           <Box component="form" sx={{ mt: 2 }}>
             <TextField
@@ -104,7 +135,6 @@ export const ClientModal = ({open, handleClose}) => {
               margin="normal"
               name="first_name"
               label="Имя:"
-              error='true'
               value={formClient.first_name}
               onChange={handleChange}
             />
@@ -140,7 +170,8 @@ export const ClientModal = ({open, handleClose}) => {
               name="date_of_birth"
               type="datetime-local"
               label="Дата рождения:"
-              value={formClient.date_of_birth}
+              value="2024-02-21T05:12"
+              // value={formClient.date_of_birth}
               onChange={handleChange}
               slotProps={{
                 inputLabel: {
@@ -162,8 +193,8 @@ export const ClientModal = ({open, handleClose}) => {
                 },
               }}
             />
-            <FormControl fullWidth margin="normal">
-              <InputLabel id="status-select-label">Select Name</InputLabel>
+            {/* <FormControl fullWidth margin="normal">
+              <InputLabel id="status-select-label">Статус</InputLabel>
               <Select
                 labelId="status-select-label"
                 name="status"
@@ -175,12 +206,14 @@ export const ClientModal = ({open, handleClose}) => {
                   <MenuItem key={status} value={status}>{status}</MenuItem>
                 ))}
               </Select>
-            </FormControl>
+            </FormControl> */}
             <Button
              variant="contained" 
              sx={{ mt: 2 }}
              onClick={onChangeSubmit}
-            >Submit</Button>
+            >
+              Отправить
+            </Button>
           </Box>
         </Box>
       </Fade>
