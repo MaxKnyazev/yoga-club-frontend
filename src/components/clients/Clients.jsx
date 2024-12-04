@@ -3,9 +3,7 @@ import { Container, Typography } from '@mui/material';
 import { useStoreOfYogaClub, getAllClientsSelector } from '../../store';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid2';
 import Fab from '@mui/material/Fab';
@@ -14,10 +12,24 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import Tooltip from '@mui/material/Tooltip';
+import TextField from '@mui/material/TextField';
 import { deleteClient } from '../../store';
 import { ClientModalNewItem } from './ClientModalNewItem';
-import { ClientModalEditItem } from './ClientModalEditItem';
 import { ClientModalInfo } from './ClientModalInfo';
+import FormControl from '@mui/material/FormControl';
+
+
+import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Button from '@mui/material/Button';
+// import Typography from '@mui/material/Typography';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+
+
 
 
 
@@ -70,22 +82,57 @@ export const Clients = () => {
   
   const [openEditBlock, setOpenEditBlock] = React.useState(false);
   const handleOpenEditBlock = (client) => {
-    setFormData({
-      ...formData,
-      ...client,
-    });
-
+    console.log('handleOpenEditBlock  --> ', client);
+    setFormData({ ...formData, ...client, });
     setOpenEditBlock(true);
   }
-  // const handleCloseModalEditItem = () => setOpenModalEditItem(false);
 
-  // const handleChange = (e) => {
-  //   setFormData({
-  //     ...formData,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
+  const onCancel = () => {
+    setOpenEditBlock(false)
+  }
 
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const onChangeSubmit = (e) => {
+    e.preventDefault();
+    // Проверка валидности полей
+    //TODO: Условие на отправку формы ???
+
+    //TODO: Код отправки формы ??? **********************************************
+    
+    setFormData({
+      first_name: '',
+      last_name: '',
+      phone_number: '',
+      email: '',
+      date_of_birth: '',
+      registration_date: '',
+      status: '',
+    });
+
+    setOpenEditBlock(false)
+  }
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    borderRadius: '10px',
+    boxShadow: 24,
+    p: 4,
+  };
+ 
+  const statuses = ['активный', 'средний', 'начальный', 'специальный'];
+
+  // console.log('*************************************************************');
 
   return (
     <Container>
@@ -104,7 +151,7 @@ export const Clients = () => {
           mb: 2,
         }}>
         <Tooltip title="Добавить...">
-          <Fab color="primary" aria-label="add">
+          <Fab color="primary" aria-label="add" sx={{zIndex: 0}}>
             <AddIcon onClick={handleOpenModalNewItem}/>
           </Fab>
         </Tooltip>
@@ -156,27 +203,18 @@ export const Clients = () => {
              alignItems="center" 
              size={{ xs: 12, sm: 4, md: 2 }}
             >
-
-
-
-
               <Tooltip title="Изменить...">
-                <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee'}}>
-                  {/*<EditIcon onClick={() => handleOpenModalEditItem(client)}/>*/}
+                <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee', zIndex: 0}}>
                   <EditIcon onClick={() => handleOpenEditBlock(client)}/>
                 </Fab>
               </Tooltip>
-
-
-
-
               <Tooltip title="Удалить...">
-                <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890'}}>
+                <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890', zIndex: 0}}>
                   <DeleteIcon onClick={() => deleteClient(client.client_id)}/>
                 </Fab>
               </Tooltip>
               <Tooltip title="Подробнее...">
-                <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b'}}>
+                <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b', zIndex: 0}}>
                   <SendIcon onClick={() => handleOpenModalInfo(client)}/>
                 </Fab>
               </Tooltip>
@@ -186,39 +224,136 @@ export const Clients = () => {
       ))}
 
       <ClientModalNewItem {...optionsModalNewItem}/>
-      {/*<ClientModalEditItem {...optionsModalEditItem}/>*/}
       <ClientModalInfo {...optionsModalInfo}/>
 
-      <form onSubmit={() => {}}>
-      <div>
-        <label htmlFor="name">Name:</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          /* ********==================================================================== */
-          /* ********==================================================================== */
-          /* ********==================================================================== */
-          value={formData.first_name}
-          onChange={() => {}}
-        />
-      </div>
-      <div>
-        <label htmlFor="age">Age:</label>
-        <input
-          type="number"
-          id="age"
-          name="age"
-          value='12'
-          // value={formData.age}
-          onChange={() => {}}
-          // onChange={handleChange}
-        />
-      </div>
-      <button type="submit">Submit</button>
-      </form>
+      { openEditBlock && 
+        <>
+          <Box sx={style}>
+            <Typography id="transition-modal-title" variant="h6" component="h2">
+              Внесите изменения:           
+            </Typography>
+            <Box component="form" sx={{ mt: 2 }}>
       
-      
+              <TextField
+                fullWidth
+                margin="normal"
+                name="first_name"
+                label="Имя:"
+                value={formData.first_name}
+                onChange={handleChange}
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                name="last_name"
+                label="Фамилия:"
+                value={formData.last_name}
+                onChange={handleChange}
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                name="phone_number"
+                label="Телефон:"
+                type="tel"
+                value={formData.phone_number}
+                onChange={handleChange}
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                name="email"
+                label="Email:"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                name="date_of_birth"
+                type="datetime-local"
+                label="Дата рождения:"
+                // value="2024-02-21T05:12:01.455Z"
+                value={(""+formData.date_of_birth).substring(0, 19)}
+                onChange={handleChange}
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                name="registration_date"
+                type="datetime-local"
+                label="Дата регистрации:"
+                // value="2024-02-21T05:12"
+                value={(""+formData.registration_date).substring(0, 19)}
+                onChange={handleChange}
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+              />
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="status-select-label">Статус</InputLabel>
+                <Select
+                  labelId="status-select-label"
+                  name="status"
+                  // value="активный"
+                  value={formData.status}
+                  onChange={handleChange}
+                  label="Статус:"
+                >
+                  {statuses.map((status) => (
+                    <MenuItem key={status} value={status}>{status}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Box sx={{display: "flex", justifyContent: "space-between"}}>
+                <Button
+                 variant="contained" 
+                 sx={{ mt: 2 }}
+                 onClick={onChangeSubmit}
+                >
+                  Отправить
+                </Button>
+                <Button
+                 variant="contained" 
+                 sx={{ mt: 2 }}
+                 onClick={onCancel}
+                >
+                  Отменить
+                </Button>
+                
+              </Box>
+            </Box>
+          </Box>
+         </>
+      }
       </Container>
     )
   };

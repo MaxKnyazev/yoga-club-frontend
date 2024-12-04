@@ -21,8 +21,8 @@ export const getClients = async () => {
     const response = await fetch(`${BASE_URL}/clients`);
     const clients = await response.json();
     useStoreOfYogaClub.setState({clients});
+    console.log('*** Response clients --->')
     console.log(clients)
-    // console.log(response)
 }
 
 export const getAllClientsSelector = (state) => state.clients.result;
