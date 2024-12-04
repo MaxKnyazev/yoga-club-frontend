@@ -6,8 +6,8 @@ import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import { InfoValue } from '../InfoValue';
 
-export const ClientModalInfo = ({openModalInfo, handleCloseModalInfo, client}) => { 
-  
+export const ClientModalInfo = ({openModalInfo, handleCloseModalInfo, currentClient}) => { 
+  const { first_name, last_name, phone_number, email, date_of_birth, registration_date, status} = currentClient;
   const style = {
     position: 'absolute',
     top: '50%',
@@ -50,13 +50,13 @@ export const ClientModalInfo = ({openModalInfo, handleCloseModalInfo, client}) =
             flexGrow: 1,
             paddingBottom: 1, 
           }}>
-            <InfoValue title={'Имя:'} value={`${client.first_name}`} />
-            <InfoValue title={'Фамилия:'} value={`${client.last_name}`} />
-            <InfoValue title={'Телефон:'} value={`${client.phone_number}`} />
-            <InfoValue title={'Email:'} value={`${client.email}`} />
-            <InfoValue title={'Дата рождения:'} value={`${client.date_of_birth}`} />
-            <InfoValue title={'Дата регистрации:'} value={`${client.registration_date}`} />
-            <InfoValue title={'Статус:'} value={`${client.status}`} />
+            <InfoValue title={'Имя:'} value={`${first_name}`} />
+            <InfoValue title={'Фамилия:'} value={`${last_name}`} />
+            <InfoValue title={'Телефон:'} value={`${phone_number}`} />
+            <InfoValue title={'Email:'} value={`${email}`} />
+            <InfoValue title={'Дата рождения:'} value={`${date_of_birth}`} />
+            <InfoValue title={'Дата регистрации:'} value={`${registration_date}`} />
+            <InfoValue title={'Статус:'} value={`${status}`} />
           </Box>
         </Box>
       </Fade>

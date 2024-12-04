@@ -24,7 +24,7 @@ import { ClientModalInfo } from './ClientModalInfo';
 export const Clients = () => {
   const clients = useStoreOfYogaClub(getAllClientsSelector);
 
-  const [client, setClient] = React.useState({});
+  const [currentClient, setCurrentClient] = React.useState({});
 
   const [openModalNewItem, setOpenModalNewItem] = React.useState(false);
   const handleOpenModalNewItem = () => setOpenModalNewItem(true);
@@ -37,7 +37,7 @@ export const Clients = () => {
 
   const [openModalInfo, setOpenModalInfo] = React.useState(false);
   const handleOpenModalInfo = (client) => {
-    setClient(client);
+    setCurrentClient(client);
     setOpenModalInfo(true);
   }
   const handleCloseModalInfo = () => setOpenModalInfo(false);
@@ -45,12 +45,12 @@ export const Clients = () => {
   const optionsModalInfo = {
     openModalInfo,
     handleCloseModalInfo,
-    client,
+    currentClient,
   }
 
   const [openModalEditItem, setOpenModalEditItem] = React.useState(false);
   const handleOpenModalEditItem = (client) => {
-    setClient(client);//?????????????????????????????????????????
+    setCurrentClient(client);//?????????????????????????????????????????
     setOpenModalEditItem(true);
   }
   const handleCloseModalEditItem = () => setOpenModalEditItem(false);
@@ -58,14 +58,34 @@ export const Clients = () => {
   const optionsModalEditItem = {
     openModalEditItem,
     handleCloseModalEditItem,
-    client,
+    currentClient,
   }
 
-  // const deleteClient = useStoreOfYogaClub((state) => state.deleteClient);
-  // console.log('**********************');
-  // console.log(deleteClient);
-  // console.log(typeof deleteClient);
-  // deleteClient(46);
+  // console.log('*************************************************************');
+
+  const [formData, setFormData] = React.useState({});
+
+  console.log('formData');
+  console.log(formData);
+  
+  const [openEditBlock, setOpenEditBlock] = React.useState(false);
+  const handleOpenEditBlock = (client) => {
+    setFormData({
+      ...formData,
+      ...client,
+    });
+
+    setOpenEditBlock(true);
+  }
+  // const handleCloseModalEditItem = () => setOpenModalEditItem(false);
+
+  // const handleChange = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
+
 
   return (
     <Container>
@@ -142,7 +162,8 @@ export const Clients = () => {
 
               <Tooltip title="Изменить...">
                 <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee'}}>
-                  <EditIcon onClick={() => handleOpenModalEditItem(client)}/>
+                  {/*<EditIcon onClick={() => handleOpenModalEditItem(client)}/>*/}
+                  <EditIcon onClick={() => handleOpenEditBlock(client)}/>
                 </Fab>
               </Tooltip>
 
@@ -165,19 +186,114 @@ export const Clients = () => {
       ))}
 
       <ClientModalNewItem {...optionsModalNewItem}/>
-      <ClientModalEditItem {...optionsModalEditItem}/>
+      {/*<ClientModalEditItem {...optionsModalEditItem}/>*/}
       <ClientModalInfo {...optionsModalInfo}/>
 
-    </Container>
-  )
+      <form onSubmit={() => {}}>
+      <div>
+        <label htmlFor="name">Name:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          /* ********==================================================================== */
+          /* ********==================================================================== */
+          /* ********==================================================================== */
+          value={formData.first_name}
+          onChange={() => {}}
+        />
+      </div>
+      <div>
+        <label htmlFor="age">Age:</label>
+        <input
+          type="number"
+          id="age"
+          name="age"
+          value='12'
+          // value={formData.age}
+          onChange={() => {}}
+          // onChange={handleChange}
+        />
+      </div>
+      <button type="submit">Submit</button>
+      </form>
+      
+      
+      </Container>
+    )
+  };
+  
+
+
+  
+/***
+ * 
+ * import * as React from 'react';
+
+// export const ClientModalEditItem = ({client}) => { 
+export const ClientModalEditItem = ({openModalEditItem, handleCloseModalEditItem, client}) => { 
+
+  console.log('client')
+  console.log(client)
+
+  const [formData, setFormData] = React.useState(client);
+
+  console.log('formData');
+  console.log(formData);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Здесь можно выполнить действия с данными формы, например, отправить на сервер
+    console.log(formData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="name">Name:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="age">Age:</label>
+        <input
+          type="number"
+          id="age"
+          name="age"
+          value={formData.age}
+          onChange={handleChange}
+        />
+      </div>
+      <button type="submit">Submit</button>
+      </form>
+  );
 };
+ * 
+ */
 
 
 
 
 
-/*
-
+  // <ClientModalEditItem {...{...optionsModalEditItem, client:{ first_name: client.first_name}}}/>
+  // <ClientModalEditItem {...{...optionsModalEditItem, client: {...client}}}/>
+  
+  
+  
+  /*
+  
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
