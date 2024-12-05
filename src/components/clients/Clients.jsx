@@ -210,7 +210,12 @@ export const Clients = () => {
               </Tooltip>
               <Tooltip title="Удалить...">
                 <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890', zIndex: 0}}>
-                  <DeleteIcon onClick={() => deleteClient(client.client_id)}/>
+                  <DeleteIcon onClick={
+                    () => deleteClient(client.client_id)
+                      .then( _ => { console.log('+++++++ Запрос deleteClient успешно завершен!')})
+                      .catch(error => { console.error('------- ОШИБКА запроса deleteClient:', error)})
+                
+                  }/>
                 </Fab>
               </Tooltip>
               <Tooltip title="Подробнее...">

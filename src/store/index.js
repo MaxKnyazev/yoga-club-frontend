@@ -10,27 +10,183 @@ export const useStoreOfYogaClub = create(devtools(immer((set) => ({
   },
 }))))
 
-export const deleteClient = (clientId) => {
-    const state = useStoreOfYogaClub.getState();
-    const filteredResult = state.clients.result.filter((client) => client.client_id !== clientId);
-    useStoreOfYogaClub.setState({clients: {result: filteredResult, error:''}})
+export const getClients = async () => {
+  try {
+    const clients = await sendGetRequest(`${BASE_URL}/clients`);
+    useStoreOfYogaClub.setState((state) => {
+      state.clients = clients;
+    });
+    console.log('*** Response clients +--->')
+    console.log(clients)
+  } catch (error) {
+    console.error('Ошибка при отправке запроса getClients:', error);
+    throw error; // Пробрасываем ошибку дальше
+  }
 }
 
-export const getClients = async () => {
-    // const state = useStoreOfYogaClub.getState();
-    const response = await fetch(`${BASE_URL}/clients`);
-    const clients = await response.json();
-    useStoreOfYogaClub.setState({clients});
-    console.log('*** Response clients --->')
-    console.log(clients)
+export const addNewClient = async (data) => {
+  try {
+    // console.log('data .....................')
+    // console.log(data)
+    const response = await sendPostRequest(`${BASE_URL}/clients`, data);
+    // console.log('response .....................')
+    // console.log(response)
+
+    let client = {...data, client_id: response.result}
+
+    // console.log('addNewClient .....................')
+    // console.log(client)
+
+    useStoreOfYogaClub.setState((state) => {
+      state.clients.result.push(client);
+    });
+  } catch (error) {
+    console.error('Ошибка при отправке запроса getClients:', error);
+    throw error; // Пробрасываем ошибку дальше
+  }
 }
+
+export const deleteClient = async (clientId) => {
+  const response = await sendDeleteRequest(`${BASE_URL}/clients`, clientId);
+  console.log('response .....................')
+  console.log(response)
+  const id = response.result;
+  console.log('id .....................')
+  console.log(id)
+  const state = useStoreOfYogaClub.getState();
+  console.log('state .....................')
+  console.log(state)
+  const filteredResult = state.clients.result.filter((client) => client.client_id !== +id);
+  console.log('filteredResult .....................')
+  console.log(filteredResult)
+  useStoreOfYogaClub.setState({clients: {result: filteredResult, error:''}})
+}
+
 
 export const getAllClientsSelector = (state) => state.clients.result;
+
+
+// ---------------------------- FUNCTIONS ----------------------------
+
+export const sendGetRequest = async(url) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error('Ошибка при отправке запроса:', error);
+    throw error; // Пробрасываем ошибку дальше
+  }
+}
+
+export const sendPostRequest = async(url, data) => {
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error('Ошибка при отправке запроса:', error);
+    throw error; // Пробрасываем ошибку дальше
+  }
+}
+
+export const sendPutRequest = async(url, id, data) => {
+  try {
+    const response = await fetch(`${url}/${id}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) {
+      throw new Error(`Ошибка HTTP: ${response.status}`);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error('Ошибка при отправке PUT-запроса:', error);
+    throw error; // Пробрасываем ошибку дальше
+  }
+}
+
+export const sendDeleteRequest = async(url, id) => {
+  try {
+    const response = await fetch(`${url}/${id}`, {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+    });
+    if (!response.ok) {
+      throw new Error(`Ошибка HTTP: ${response.status}`);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error('Ошибка при отправке PUT-запроса:', error);
+    throw error; // Пробрасываем ошибку дальше
+  }
+}
+
+// ---------------------------- FUNCTIONS ----------------------------
+
+
+
 
 // export const deleteClientByIdSelector = (state) => state.clients.................
 
 
+/*
 
+
+async function sendPostRequest(url, data) {
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Указываем, что отправляем JSON
+      },
+      body: JSON.stringify(data), // Преобразуем объект в JSON-строку
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const responseData = await response.json(); // Обрабатываем JSON-ответ
+    return responseData;
+
+  } catch (error) {
+    console.error('Ошибка при отправке запроса:', error);
+    throw error; // Повторно выбрасываем ошибку, чтобы вызывающий код мог её обработать
+  }
+}
+
+// Пример использования:
+const apiUrl = 'https://example.com/api/endpoint'; // Замените на свой URL
+const requestData = {
+  name: 'John Doe',
+  email: 'john.doe@example.com',
+  age: 30
+};
+
+sendPostRequest(apiUrl, requestData)
+  .then(data => {
+    console.log('Успешный ответ:', data);
+  })
+  .catch(error => {
+    console.error('Ошибка:', error);
+  });
+
+
+*/
 
 
 

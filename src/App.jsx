@@ -18,7 +18,11 @@ import { getClients } from './store';
 export const App = () => {
 
   useEffect(() => {
-    getClients();
+
+    getClients()
+      .then( _ => { console.log('+++++++ Запрос getClients успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА запроса getClients:', error)});
+
   }, []);
 
   const routes = [

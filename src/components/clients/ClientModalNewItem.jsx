@@ -10,6 +10,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
+import { addNewClient } from '../../store';
 
 export const ClientModalNewItem = ({openModalNewItem, handleCloseModalNewItem}) => {
   const [formClient, setFormClient] = React.useState({
@@ -66,7 +67,14 @@ export const ClientModalNewItem = ({openModalNewItem, handleCloseModalNewItem}) 
     /************************************ */
     //TODO: Условие на отправку формы ???
     /************************************ */
+    console.log('formClient-----------------------------------');
     console.log(formClient);
+
+    addNewClient(formClient)
+      .then( _ => { console.log('+++++++ Запрос addNewClient успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА запроса addNewClient:', error)});
+
+
     setFormClient({
       first_name: '',
       last_name: '',
