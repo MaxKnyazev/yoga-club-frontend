@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { devtools } from 'zustand/middleware';
 import { BASE_URL } from '../constants';
+import { sendDeleteRequest, sendPutRequest, sendPostRequest, sendGetRequest } from '../utils';
 
 export const useStoreOfYogaClub = create(devtools(immer((set) => ({
   clients: {
@@ -9,6 +10,8 @@ export const useStoreOfYogaClub = create(devtools(immer((set) => ({
     error: ''
   },
 }))))
+
+export const getAllClientsSelector = (state) => state.clients.result;
 
 export const getClients = async () => {
   try {
@@ -31,12 +34,9 @@ export const addNewClient = async (data) => {
     const response = await sendPostRequest(`${BASE_URL}/clients`, data);
     // console.log('response .....................')
     // console.log(response)
-
     let client = {...data, client_id: response.result}
-
     // console.log('addNewClient .....................')
     // console.log(client)
-
     useStoreOfYogaClub.setState((state) => {
       state.clients.result.push(client);
     });
@@ -48,94 +48,123 @@ export const addNewClient = async (data) => {
 
 export const deleteClient = async (clientId) => {
   const response = await sendDeleteRequest(`${BASE_URL}/clients`, clientId);
-  console.log('response .....................')
-  console.log(response)
+  // console.log('response .....................')
+  // console.log(response)
   const id = response.result;
-  console.log('id .....................')
-  console.log(id)
+  // console.log('id .....................')
+  // console.log(id)
   const state = useStoreOfYogaClub.getState();
-  console.log('state .....................')
-  console.log(state)
-  const filteredResult = state.clients.result.filter((client) => client.client_id !== +id);
-  console.log('filteredResult .....................')
-  console.log(filteredResult)
-  useStoreOfYogaClub.setState({clients: {result: filteredResult, error:''}})
+  // console.log('state .....................')
+  // console.log(state)
+  const filteredResult = state.clients.result.filter((client) => +client.client_id !== id);
+  // console.log('filteredResult .....................')
+  // console.log(filteredResult)
+  useStoreOfYogaClub.setState(
+    // {clients: {result: filteredResult, error:''}}
+    (state) => { 
+      return {...state, clients: {result: filteredResult}, error: ''}
+    }
+  )
 }
 
-
-export const getAllClientsSelector = (state) => state.clients.result;
-
-
-// ---------------------------- FUNCTIONS ----------------------------
-
-export const sendGetRequest = async(url) => {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    console.error('Ошибка при отправке запроса:', error);
-    throw error; // Пробрасываем ошибку дальше
+export const editClient = async (id, data) => {
+  // console.log('id .....................')
+  // console.log(id)
+  // console.log('data .....................')
+  // console.log(data)
+  const response = await sendPutRequest(`${BASE_URL}/clients`, id, data);
+  // console.log('response .....................')
+  // console.log(response)
+  if (response.result[0] === 1) {
+    const client = {...data, client_id: id};
+    // console.log('client .....................')
+    // console.log(client)
+    const state = useStoreOfYogaClub.getState();
+    // console.log('state .....................')
+    // console.log(state)
+    const updatedClients = state.clients.result.map((c) => (c.client_id === id? client : c));
+    // console.log('updatedClients .....................')
+    // console.log(updatedClients)
+    // useStoreOfYogaClub.setState({clients: {result: updatedClients, error: ''}});
+    useStoreOfYogaClub.setState(
+      (state) => { 
+        return {...state, clients: {result: updatedClients}, error: ''}
+      }
+    );
   }
 }
 
-export const sendPostRequest = async(url, data) => {
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    console.error('Ошибка при отправке запроса:', error);
-    throw error; // Пробрасываем ошибку дальше
-  }
-}
 
-export const sendPutRequest = async(url, id, data) => {
-  try {
-    const response = await fetch(`${url}/${id}`, {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(data)
-    });
-    if (!response.ok) {
-      throw new Error(`Ошибка HTTP: ${response.status}`);
-    }
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    console.error('Ошибка при отправке PUT-запроса:', error);
-    throw error; // Пробрасываем ошибку дальше
-  }
-}
+// // ---------------------------- FUNCTIONS ----------------------------
 
-export const sendDeleteRequest = async(url, id) => {
-  try {
-    const response = await fetch(`${url}/${id}`, {
-      method: 'DELETE',
-      headers: {'Content-Type': 'application/json'},
-    });
-    if (!response.ok) {
-      throw new Error(`Ошибка HTTP: ${response.status}`);
-    }
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    console.error('Ошибка при отправке PUT-запроса:', error);
-    throw error; // Пробрасываем ошибку дальше
-  }
-}
+// export const sendGetRequest = async(url) => {
+//   try {
+//     const response = await fetch(url);
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! Status: ${response.status}`);
+//     }
+//     const responseData = await response.json();
+//     return responseData;
+//   } catch (error) {
+//     console.error('Ошибка при отправке запроса:', error);
+//     throw error; // Пробрасываем ошибку дальше
+//   }
+// }
 
-// ---------------------------- FUNCTIONS ----------------------------
+// export const sendPostRequest = async(url, data) => {
+//   try {
+//     const response = await fetch(url, {
+//       method: 'POST',
+//       headers: {'Content-Type': 'application/json'},
+//       body: JSON.stringify(data),
+//     });
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! Status: ${response.status}`);
+//     }
+//     const responseData = await response.json();
+//     return responseData;
+//   } catch (error) {
+//     console.error('Ошибка при отправке запроса:', error);
+//     throw error; // Пробрасываем ошибку дальше
+//   }
+// }
+
+// export const sendPutRequest = async(url, id, data) => {
+//   try {
+//     const response = await fetch(`${url}/${id}`, {
+//       method: 'PUT',
+//       headers: {'Content-Type': 'application/json'},
+//       body: JSON.stringify(data)
+//     });
+//     if (!response.ok) {
+//       throw new Error(`Ошибка HTTP: ${response.status}`);
+//     }
+//     const responseData = await response.json();
+//     return responseData;
+//   } catch (error) {
+//     console.error('Ошибка при отправке PUT-запроса:', error);
+//     throw error; // Пробрасываем ошибку дальше
+//   }
+// }
+
+// export const sendDeleteRequest = async(url, id) => {
+//   try {
+//     const response = await fetch(`${url}/${id}`, {
+//       method: 'DELETE',
+//       headers: {'Content-Type': 'application/json'},
+//     });
+//     if (!response.ok) {
+//       throw new Error(`Ошибка HTTP: ${response.status}`);
+//     }
+//     const responseData = await response.json();
+//     return responseData;
+//   } catch (error) {
+//     console.error('Ошибка при отправке PUT-запроса:', error);
+//     throw error; // Пробрасываем ошибку дальше
+//   }
+// }
+
+// // ---------------------------- FUNCTIONS ----------------------------
 
 
 

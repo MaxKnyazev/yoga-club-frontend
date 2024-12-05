@@ -13,7 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import Tooltip from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
-import { deleteClient } from '../../store';
+import { deleteClient, editClient} from '../../store';
 import { ClientModalNewItem } from './ClientModalNewItem';
 import { ClientModalInfo } from './ClientModalInfo';
 import FormControl from '@mui/material/FormControl';
@@ -98,12 +98,28 @@ export const Clients = () => {
     });
   };
 
-  const onChangeSubmit = (e) => {
-    e.preventDefault();
+  const onChangeSubmit = (data) => {
+    // e.preventDefault();
     // Проверка валидности полей
     //TODO: Условие на отправку формы ???
 
     //TODO: Код отправки формы ??? **********************************************
+
+    // console.log('data   >>>>>>>>>>>>>>>>>>>>>>>>>>')
+    // console.log(data)
+    const { client_id, updatedAt, createdAt, ...putData } = data;
+    // console.log('client_id   >>>>>>>>>>>>>>>>>>>>>>>>>>')
+    // console.log(client_id)
+    // console.log('putData   >>>>>>>>>>>>>>>>>>>>>>>>>>')
+    // console.log(putData)
+
+
+
+
+    editClient(client_id, putData)
+      .then( _ => { console.log('+++++++ Запрос editClient успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА запроса editClient:', error)});
+
     
     setFormData({
       first_name: '',
@@ -342,7 +358,7 @@ export const Clients = () => {
                 <Button
                  variant="contained" 
                  sx={{ mt: 2 }}
-                 onClick={onChangeSubmit}
+                 onClick={() => onChangeSubmit(formData)}
                 >
                   Отправить
                 </Button>
