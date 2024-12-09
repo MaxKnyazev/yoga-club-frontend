@@ -1,13 +1,12 @@
 import React from 'react';
-import { Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
+import { Logs } from '../components/logs/Logs';
+
 
 export const LogsPage = () => {
   return (
     <Container>
-      <Typography variant="h5" sx={{textAlign: 'center', textTransform: 'uppercase'}}>
-        Архив операций
-      </Typography>
-
+      <Logs />
     </Container>
   );
 };

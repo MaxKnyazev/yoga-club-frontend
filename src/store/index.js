@@ -9,23 +9,42 @@ export const useStoreOfYogaClub = create(devtools(immer((set) => ({
     result: [],
     error: ''
   },
+  logs: [],
 }))))
 
 export const getAllClientsSelector = (state) => state.clients.result;
 
-export const getClients = async () => {
+export const getAllLogsSelector = (state) => state.logs;
+
+
+
+export const getEntityes = async (endpoint) => {
   try {
-    const clients = await sendGetRequest(`${BASE_URL}/clients`);
+    const entitys = await sendGetRequest(`${BASE_URL}/${endpoint}`);
     useStoreOfYogaClub.setState((state) => {
-      state.clients = clients;
+      state[`${endpoint}`] = entitys;
     });
-    console.log('*** Response clients +--->')
-    console.log(clients)
+    console.log(`*** Response ${endpoint} +--->`)
+    console.log(entitys)
   } catch (error) {
-    console.error('Ошибка при отправке запроса getClients:', error);
+    console.error(`Ошибка при отправке запроса /${endpoint}:`, error);
     throw error; // Пробрасываем ошибку дальше
   }
 }
+
+// export const getClients = async () => {
+//   try {
+//     const clients = await sendGetRequest(`${BASE_URL}/clients`);
+//     useStoreOfYogaClub.setState((state) => {
+//       state.clients = clients;
+//     });
+//     console.log('*** Response clients +--->')
+//     console.log(clients)
+//   } catch (error) {
+//     console.error('Ошибка при отправке запроса getClients:', error);
+//     throw error; // Пробрасываем ошибку дальше
+//   }
+// }
 
 export const addNewClient = async (data) => {
   try {

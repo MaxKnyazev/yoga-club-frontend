@@ -13,15 +13,17 @@ import { InstructorsPage } from './pages/InstructorsPage';
 import { MembershipsPage } from './pages/MembershipsPage';
 import { MembershipTypesPage } from './pages/MembershipTypesPage';
 import Container from '@mui/material/Container';
-import { getClients } from './store';
+import { getEntityes } from './store';
 
 export const App = () => {
-
   useEffect(() => {
+    getEntityes('clients')
+      .then( _ => { console.log('+++++++ Запрос /clients успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА запроса /clients:', error)});
+    getEntityes('logs')
+      .then( _ => { console.log('+++++++ Запрос /logs успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА запроса /logs:', error)});
 
-    getClients()
-      .then( _ => { console.log('+++++++ Запрос getClients успешно завершен!')})
-      .catch(error => { console.error('------- ОШИБКА запроса getClients:', error)});
 
   }, []);
 
