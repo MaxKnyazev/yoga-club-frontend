@@ -109,28 +109,3 @@ export const Logs = () => {
     </Container>
   );
 };
-
-
-
-
-
-
-/*
-
-
-[
-  {
-    "log_id": "38212007",
-    "log_date": "2024-12-09T16:27:45.410Z",
-    "operation": "DELETE",
-    "table_name": "Yoga_instructors",
-    "trigger_name": "after_instructors_trigger",
-    "tables_id": "17",
-    "createdAt": "2024-12-09T16:27:45.410Z",
-    "updatedAt": "2024-12-09T16:27:45.410Z"
-  }
-]
-
-
-
-*/

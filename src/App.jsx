@@ -23,6 +23,9 @@ export const App = () => {
     getEntityes('logs')
       .then( _ => { console.log('+++++++ Запрос /logs успешно завершен!')})
       .catch(error => { console.error('------- ОШИБКА запроса /logs:', error)});
+    getEntityes('cardtypes')
+      .then( _ => { console.log('+++++++ Запрос /cardtypes успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА запроса /cardtypes:', error)});
 
 
   }, []);

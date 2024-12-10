@@ -1,13 +1,11 @@
 import React from 'react';
-import { Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
+import { Cardtypes } from '../components/cardtypes/Cardtypes';
 
 export const CardTypesPage = () => {
   return (
     <Container>
-    <Typography variant="h5" sx={{textAlign: 'center', textTransform: 'uppercase'}}>
-      Типы клубных карт
-    </Typography>
-
+      <Cardtypes />
     </Container>
   );
 };
