@@ -9,14 +9,14 @@ import Tooltip from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { useStoreOfYogaClub, getAllCardtypesSelector } from '../../store';
+import { useStoreOfYogaClub, getAllMembershiptypesSelector } from '../../store';
 import { deleteEntity, editEntity } from '../../store';
-import { CardtypeModalNewItem } from './CardtypeModalNewItem';
+import { MembershiptypeModalNewItem } from './MembershiptypeModalNewItem';
 
-export const Cardtypes = () => {
-  const cardtypes = useStoreOfYogaClub(getAllCardtypesSelector);
+export const Membershiptypes = () => {
+  const cardtypes = useStoreOfYogaClub(getAllMembershiptypesSelector);
 
-  const [currentCardtype, setCurrentCardtype] = React.useState({});
+  const [currentMembershiptype, setCurrentMembershiptype] = React.useState({});
 
   const [openModalNewItem, setOpenModalNewItem] = React.useState(false);
   const handleOpenModalNewItem = () => setOpenModalNewItem(true);
@@ -30,8 +30,8 @@ export const Cardtypes = () => {
   // console.log('*************************************************************');
 
   const [openModalEditItem, setOpenModalEditItem] = React.useState(false);
-  const handleOpenModalEditItem = (cardtype) => {
-    setCurrentCardtype(cardtype);//?????????????????????????????????????????
+  const handleOpenModalEditItem = (membershiptype) => {
+    setCurrentMembershiptype(membershiptype);//?????????????????????????????????????????
     setOpenModalEditItem(true);
   }
   const handleCloseModalEditItem = () => setOpenModalEditItem(false);
@@ -39,7 +39,7 @@ export const Cardtypes = () => {
   const optionsModalEditItem = {
     openModalEditItem,
     handleCloseModalEditItem,
-    currentCardtype,
+    currentMembershiptype,
   }
 
   // console.log('*************************************************************');
@@ -51,8 +51,8 @@ export const Cardtypes = () => {
   
   const [openEditBlock, setOpenEditBlock] = React.useState(false);
   const handleOpenEditBlock = (cardtype) => {
-    console.log('handleOpenEditBlock  --> ', cardtype);
-    setFormData({ ...formData, ...cardtype, });
+    console.log('handleOpenEditBlock  --> ', membershiptype);
+    setFormData({ ...formData, ...membershiptype, });
     setOpenEditBlock(true);
   }
 
@@ -72,25 +72,19 @@ export const Cardtypes = () => {
 
     // console.log('data   >>>>>>>>>>>>>>>>>>>>>>>>>>')
     // console.log(data)
-    const { card_type_id, updatedAt, createdAt, ...putData } = data;
+    const { type_id, updatedAt, createdAt, ...putData } = data;
     // console.log('client_id   >>>>>>>>>>>>>>>>>>>>>>>>>>')
     // console.log(client_id)
     // console.log('putData   >>>>>>>>>>>>>>>>>>>>>>>>>>')
     // console.log(putData)
 
-      // "card_type_id": "1",
-      // "card_type_name": "бюджетная",
-      // "price": 10000,
-      // "createdAt": "2024-10-16T13:32:02.000Z",
-      // "updatedAt": "2024-10-16T13:32:05.000Z"
-
-    editEntity(card_type_id, 'card_type_id', 'cardtypes', putData)
-      .then( _ => { console.log('+++++++ Запрос editEntity -- Cardtypes успешно завершен!')})
-      .catch(error => { console.error('------- ОШИБКА запроса editEntity -- Cardtypes:', error)});
+    editEntity(type_id, 'type_id', 'membershiptypes', putData)
+      .then( _ => { console.log('+++++++ Запрос editEntity -- Membershiptypes успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА запроса editEntity -- Membershiptypes:', error)});
 
     setFormData({
-      card_type_name: '',
-      price: '',
+      type_name: '',
+      sessions_allowed: '',
     });
 
     setOpenEditBlock(false)
@@ -117,7 +111,7 @@ export const Cardtypes = () => {
           color: '#141414',
           mb: 2,
         }}>
-        Типы клубных карт
+        Типы членства клуба
       </Typography>
       <Typography variant="h5" 
         sx={{
@@ -131,7 +125,23 @@ export const Cardtypes = () => {
         </Tooltip>
       </Typography>
 
-      { cardtypes.map((cardtype) => (
+
+
+
+
+
+
+      
+
+      </Container>
+    )
+  };
+
+
+/**
+ * 
+ * 
+ *       { cardtypes.map((cardtype) => (
         <Box key={cardtype.card_type_id}
          sx={{ 
           flexGrow: 1,
@@ -197,7 +207,7 @@ export const Cardtypes = () => {
         </Box>
       ))}
 
-      <CardtypeModalNewItem {...optionsModalNewItem}/>
+      <MembershiptypeModalNewItem {...optionsModalNewItem}/>
 
       { openEditBlock && 
         <>
@@ -254,15 +264,6 @@ export const Cardtypes = () => {
         </>
       }
 
-
-      </Container>
-    )
-  };
-
-      // "card_type_id": "1",
-      // "card_type_name": "бюджетная",
-      // "price": 10000,
-      // "createdAt": "2024-10-16T13:32:02.000Z",
-      // "updatedAt": "2024-10-16T13:32:05.000Z"
-
-
+ * 
+ * 
+ */

@@ -1,10 +1,6 @@
 import React from 'react';
 import { Container, Typography } from '@mui/material';
 import { useStoreOfYogaClub, getAllClientsSelector } from '../../store';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid2';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
@@ -13,25 +9,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import Tooltip from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
-import { deleteClient, editClient} from '../../store';
+import { deleteEntity, editEntity} from '../../store';
 import { ClientModalNewItem } from './ClientModalNewItem';
 import { ClientModalInfo } from './ClientModalInfo';
 import FormControl from '@mui/material/FormControl';
-
-
-import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
-// import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-
-
-
-
 
 export const Clients = () => {
   const clients = useStoreOfYogaClub(getAllClientsSelector);
@@ -115,10 +101,13 @@ export const Clients = () => {
 
 
 
+    editEntity(client_id, 'client_id', 'clients', putData)
+      .then( _ => { console.log('+++++++ Запрос editEntity -- Clients успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА запроса editEntity -- Clients:', error)});
 
-    editClient(client_id, putData)
-      .then( _ => { console.log('+++++++ Запрос editClient успешно завершен!')})
-      .catch(error => { console.error('------- ОШИБКА запроса editClient:', error)});
+    // editClient(client_id, putData)
+    //   .then( _ => { console.log('+++++++ Запрос editClient успешно завершен!')})
+    //   .catch(error => { console.error('------- ОШИБКА запроса editClient:', error)});
 
     
     setFormData({
@@ -227,10 +216,10 @@ export const Clients = () => {
               <Tooltip title="Удалить...">
                 <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890', zIndex: 0}}>
                   <DeleteIcon onClick={
-                    () => deleteClient(client.client_id)
-                      .then( _ => { console.log('+++++++ Запрос deleteClient успешно завершен!')})
-                      .catch(error => { console.error('------- ОШИБКА запроса deleteClient:', error)})
-                
+                    () => deleteEntity(client.client_id, 'client_id', 'clients')
+                      .then( _ => { console.log('+++++++ Запрос deleteEntity -- Clients успешно завершен!')})
+                      .catch(error => { console.error('------- ОШИБКА запроса deleteEntity -- Clients:', error)})
+
                   }/>
                 </Fab>
               </Tooltip>

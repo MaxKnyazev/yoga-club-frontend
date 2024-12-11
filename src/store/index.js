@@ -13,14 +13,18 @@ export const useStoreOfYogaClub = create(devtools(immer((set) => ({
     result: [],
     error: ''
   },
+  membershiptypes: {
+    result: [],
+    error: ''
+  },
   logs: [],
 }))))
 
+
 export const getAllClientsSelector = (state) => state.clients.result;
 export const getAllCardtypesSelector = (state) => state.cardtypes.result;
-
+export const getAllMembershiptypesSelector = (state) => state.membershiptypes.result;
 export const getAllLogsSelector = (state) => state.logs;
-
 
 
 export const getEntityes = async (endpoint) => {
@@ -37,41 +41,38 @@ export const getEntityes = async (endpoint) => {
   }
 }
 
-// export const getClients = async () => {
-//   try {
-//     const clients = await sendGetRequest(`${BASE_URL}/clients`);
-//     useStoreOfYogaClub.setState((state) => {
-//       state.clients = clients;
-//     });
-//     console.log('*** Response clients +--->')
-//     console.log(clients)
-//   } catch (error) {
-//     console.error('Ошибка при отправке запроса getClients:', error);
-//     throw error; // Пробрасываем ошибку дальше
-//   }
-// }
-
-export const addNewClient = async (data) => {
+/**
+ * 
+ * @param {*} idTitle  - название id сущности, например "card_type_id"
+ * @param {*} endpoint - например "cardtypes" 
+ * @param {*} data     - данные формы
+ */
+export const addNewEntity = async (idTitle, endpoint, data) => {
   try {
     // console.log('data .....................')
     // console.log(data)
-    const response = await sendPostRequest(`${BASE_URL}/clients`, data);
+    const response = await sendPostRequest(`${BASE_URL}/${endpoint}`, data);
     // console.log('response .....................')
     // console.log(response)
-    let client = {...data, client_id: response.result}
+    let entity = {...data, [`${idTitle}`]: response.result}
     // console.log('addNewClient .....................')
     // console.log(client)
     useStoreOfYogaClub.setState((state) => {
-      state.clients.result.push(client);
+      state[`${endpoint}`].result.push(entity);
     });
   } catch (error) {
-    console.error('Ошибка при отправке запроса getClients:', error);
+    console.error(`Ошибка при отправке запроса addNewEntity -- /${endpoint}:`, error);
     throw error; // Пробрасываем ошибку дальше
   }
 }
 
-export const deleteClient = async (clientId) => {
-  const response = await sendDeleteRequest(`${BASE_URL}/clients`, clientId);
+/**
+ * @param {*} entityId - id сущности
+ * @param {*} idTitle  - название id сущности, например "card_type_id"
+ * @param {*} endpoint - например "cardtypes" 
+ */
+export const deleteEntity = async (entityId, idTitle, endpoint) => {
+  const response = await sendDeleteRequest(`${BASE_URL}/${endpoint}`, entityId);
   // console.log('response .....................')
   // console.log(response)
   const id = response.result;
@@ -80,39 +81,45 @@ export const deleteClient = async (clientId) => {
   const state = useStoreOfYogaClub.getState();
   // console.log('state .....................')
   // console.log(state)
-  const filteredResult = state.clients.result.filter((client) => +client.client_id !== id);
+  const filteredResult = state[`${endpoint}`].result.filter((client) => +client[`${idTitle}`] !== id);
   // console.log('filteredResult .....................')
   // console.log(filteredResult)
   useStoreOfYogaClub.setState(
     // {clients: {result: filteredResult, error:''}}
     (state) => { 
-      return {...state, clients: {result: filteredResult}, error: ''}
+      return {...state, [`${endpoint}`]: {result: filteredResult}, error: ''}
     }
   )
 }
 
-export const editClient = async (id, data) => {
+/**
+ * @param {*} entityId - id сущности
+ * @param {*} idTitle  - название id сущности, например "card_type_id"
+ * @param {*} endpoint - например "cardtypes" 
+ * @param {*} data     - данные формы
+ */
+export const editEntity = async (entityId, idTitle, endpoint, data) => {
   // console.log('id .....................')
   // console.log(id)
   // console.log('data .....................')
   // console.log(data)
-  const response = await sendPutRequest(`${BASE_URL}/clients`, id, data);
+  const response = await sendPutRequest(`${BASE_URL}/${endpoint}`, entityId, data);
   // console.log('response .....................')
   // console.log(response)
   if (response.result[0] === 1) {
-    const client = {...data, client_id: id};
+    const entity = {...data, [`${idTitle}`]: entityId};
     // console.log('client .....................')
     // console.log(client)
     const state = useStoreOfYogaClub.getState();
     // console.log('state .....................')
     // console.log(state)
-    const updatedClients = state.clients.result.map((c) => (c.client_id === id? client : c));
+    const updatedEntitys = state[`${endpoint}`].result.map((e) => (e[`${idTitle}`] === entityId? entity : e));
     // console.log('updatedClients .....................')
     // console.log(updatedClients)
     // useStoreOfYogaClub.setState({clients: {result: updatedClients, error: ''}});
     useStoreOfYogaClub.setState(
       (state) => { 
-        return {...state, clients: {result: updatedClients}, error: ''}
+        return {...state, [`${endpoint}`]: {result: updatedEntitys}, error: ''}
       }
     );
   }
@@ -124,6 +131,34 @@ export const editClient = async (id, data) => {
 
 
 /*
+
+
+// export const editClient = async (id, data) => {
+//   // console.log('id .....................')
+//   // console.log(id)
+//   // console.log('data .....................')
+//   // console.log(data)
+//   const response = await sendPutRequest(`${BASE_URL}/clients`, id, data);
+//   // console.log('response .....................')
+//   // console.log(response)
+//   if (response.result[0] === 1) {
+//     const client = {...data, client_id: id};
+//     // console.log('client .....................')
+//     // console.log(client)
+//     const state = useStoreOfYogaClub.getState();
+//     // console.log('state .....................')
+//     // console.log(state)
+//     const updatedClients = state.clients.result.map((c) => (c.client_id === id? client : c));
+//     // console.log('updatedClients .....................')
+//     // console.log(updatedClients)
+//     // useStoreOfYogaClub.setState({clients: {result: updatedClients, error: ''}});
+//     useStoreOfYogaClub.setState(
+//       (state) => { 
+//         return {...state, clients: {result: updatedClients}, error: ''}
+//       }
+//     );
+//   }
+// }
 
 
 let promise = fetch(url, {

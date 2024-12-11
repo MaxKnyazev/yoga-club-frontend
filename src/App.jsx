@@ -26,6 +26,9 @@ export const App = () => {
     getEntityes('cardtypes')
       .then( _ => { console.log('+++++++ Запрос /cardtypes успешно завершен!')})
       .catch(error => { console.error('------- ОШИБКА запроса /cardtypes:', error)});
+    getEntityes('membershiptypes')
+      .then( _ => { console.log('+++++++ Запрос /membershiptypes успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА запроса /membershiptypes:', error)});
 
 
   }, []);

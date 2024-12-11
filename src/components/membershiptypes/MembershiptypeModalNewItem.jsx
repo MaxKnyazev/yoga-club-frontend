@@ -8,10 +8,10 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { addNewEntity } from '../../store';
 
-export const CardtypeModalNewItem = ({openModalNewItem, handleCloseModalNewItem}) => {
+export const MembershiptypeModalNewItem = ({openModalNewItem, handleCloseModalNewItem}) => {
   const [formCardtype, setFormCardtype] = React.useState({
-    card_type_name: '',
-    price: '',
+    type_name: '',
+    sessions_allowed: '',
 });
 
   const style = {

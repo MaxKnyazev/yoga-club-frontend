@@ -10,7 +10,8 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import { addNewClient } from '../../store';
+// import { addNewClient } from '../../store';
+import { addNewEntity } from '../../store';
 
 export const ClientModalNewItem = ({openModalNewItem, handleCloseModalNewItem}) => {
   const [formClient, setFormClient] = React.useState({
@@ -61,19 +62,12 @@ export const ClientModalNewItem = ({openModalNewItem, handleCloseModalNewItem}) 
   const onChangeSubmit = (e) => {
     e.preventDefault();
 
+    // console.log('formClient-----------------------------------');
+    // console.log(formClient);
 
-
-    // Проверка валидности полей
-    /************************************ */
-    //TODO: Условие на отправку формы ???
-    /************************************ */
-    console.log('formClient-----------------------------------');
-    console.log(formClient);
-
-    addNewClient(formClient)
-      .then( _ => { console.log('+++++++ Запрос addNewClient успешно завершен!')})
-      .catch(error => { console.error('------- ОШИБКА запроса addNewClient:', error)});
-
+    addNewEntity('clients_id', 'clients', formClient)
+      .then( _ => { console.log(`+++++++ Запрос addNewEntity успешно завершен!`)})
+      .catch(error => { console.error(`------- ОШИБКА запроса addNewEntity!`, error)});
 
     setFormClient({
       first_name: '',
