@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import { addNewEntity } from '../../store';
 
 export const MembershiptypeModalNewItem = ({openModalNewItem, handleCloseModalNewItem}) => {
-  const [formCardtype, setFormCardtype] = React.useState({
+  const [formMembershiptype, setFormMembershiptype] = React.useState({
     type_name: '',
     sessions_allowed: '',
 });
@@ -28,7 +28,7 @@ export const MembershiptypeModalNewItem = ({openModalNewItem, handleCloseModalNe
   
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormCardtype(prevData => ({
+    setFormMembershiptype(prevData => ({
       ...prevData,
       [name]: value,
     }));
@@ -37,16 +37,13 @@ export const MembershiptypeModalNewItem = ({openModalNewItem, handleCloseModalNe
   const onChangeSubmit = (e) => {
     e.preventDefault();
 
-    // console.log('formCardtype-----------------------------------');
-    // console.log(formCardtype);
+    addNewEntity('type_id', 'membershiptypes', formMembershiptype)
+      .then( _ => { console.log(`+++++++ Запрос addNewEntity -- MembershiptypeModalNewItem успешно завершен!`)})
+      .catch(error => { console.error(`------- ОШИБКА запроса addNewEntity -- MembershiptypeModalNewItem!`, error)});
 
-    addNewEntity('card_type_id', 'cardtypes', formCardtype)
-      .then( _ => { console.log(`+++++++ Запрос addNewEntity -- CardtypeModalNewItem успешно завершен!`)})
-      .catch(error => { console.error(`------- ОШИБКА запроса addNewEntity -- CardtypeModalNewItem!`, error)});
-
-    setFormCardtype({
-      card_type_name: '',
-      price: '',
+    setFormMembershiptype({
+      type_name: '',
+      sessions_allowed: '',
     })
     handleCloseModalNewItem();
   }
@@ -68,24 +65,24 @@ export const MembershiptypeModalNewItem = ({openModalNewItem, handleCloseModalNe
       <Fade in={openModalNewItem}>
         <Box sx={style}>
           <Typography id="transition-modal-title" variant="h6" component="h2">
-            Новый тип карты:           
+            Новый тип членства:           
           </Typography>
           <Box component="form" sx={{ mt: 2 }}>
             <TextField
               fullWidth
               margin="normal"
-              name="card_type_name"
+              name="type_name"
               label="Тип:"
-              value={formCardtype.card_type_name}
+              value={formMembershiptype.type_name}
               onChange={handleChange}
             />
             <TextField
               fullWidth
               margin="normal"
-              name="price"
-              label="Цена:"
+              name="sessions_allowed"
+              label="Кол.-во сеансов:"
               type="number"
-              value={formCardtype.price}
+              value={formMembershiptype.sessions_allowed}
               onChange={handleChange}
             />
             <Button

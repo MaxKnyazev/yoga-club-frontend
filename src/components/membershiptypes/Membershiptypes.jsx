@@ -14,7 +14,7 @@ import { deleteEntity, editEntity } from '../../store';
 import { MembershiptypeModalNewItem } from './MembershiptypeModalNewItem';
 
 export const Membershiptypes = () => {
-  const cardtypes = useStoreOfYogaClub(getAllMembershiptypesSelector);
+  const membershiptypes = useStoreOfYogaClub(getAllMembershiptypesSelector);
 
   const [currentMembershiptype, setCurrentMembershiptype] = React.useState({});
 
@@ -31,7 +31,7 @@ export const Membershiptypes = () => {
 
   const [openModalEditItem, setOpenModalEditItem] = React.useState(false);
   const handleOpenModalEditItem = (membershiptype) => {
-    setCurrentMembershiptype(membershiptype);//?????????????????????????????????????????
+    setCurrentMembershiptype(membershiptype);
     setOpenModalEditItem(true);
   }
   const handleCloseModalEditItem = () => setOpenModalEditItem(false);
@@ -46,11 +46,11 @@ export const Membershiptypes = () => {
 
   const [formData, setFormData] = React.useState({});
 
-  console.log('formData');
-  console.log(formData);
+  // console.log('formData');
+  // console.log(formData);
   
   const [openEditBlock, setOpenEditBlock] = React.useState(false);
-  const handleOpenEditBlock = (cardtype) => {
+  const handleOpenEditBlock = (membershiptype) => {
     console.log('handleOpenEditBlock  --> ', membershiptype);
     setFormData({ ...formData, ...membershiptype, });
     setOpenEditBlock(true);
@@ -124,25 +124,8 @@ export const Membershiptypes = () => {
           </Fab>
         </Tooltip>
       </Typography>
-
-
-
-
-
-
-
-      
-
-      </Container>
-    )
-  };
-
-
-/**
- * 
- * 
- *       { cardtypes.map((cardtype) => (
-        <Box key={cardtype.card_type_id}
+      { membershiptypes.map((membershiptype) => (
+        <Box key={membershiptype.type_id}
          sx={{ 
           flexGrow: 1,
           paddingBottom: 1, 
@@ -164,7 +147,7 @@ export const Membershiptypes = () => {
                   pl: 1,
                   fontWeight: 'bold',
                 }}>
-                {cardtype.card_type_name}
+                {membershiptype.type_name}
               </Typography>
             </Grid>
             <Grid
@@ -179,7 +162,7 @@ export const Membershiptypes = () => {
                   fontSize: '1rem',
                   pl: 1,
                 }}>
-                Цена: {cardtype.price}
+                Кол.-во сеансов: {membershiptype.sessions_allowed}
               </Typography>
             </Grid>
             <Grid
@@ -190,15 +173,15 @@ export const Membershiptypes = () => {
             >
               <Tooltip title="Изменить...">
                 <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee', zIndex: 0}}>
-                  <EditIcon onClick={() => handleOpenEditBlock(cardtype)}/>
+                  <EditIcon onClick={() => handleOpenEditBlock(membershiptype)}/>
                 </Fab>
               </Tooltip>
               <Tooltip title="Удалить...">
                 <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890', zIndex: 0}}>
                   <DeleteIcon onClick={
-                    () => deleteEntity(cardtype.card_type_id, 'card_type_id', 'cardtypes')
-                      .then( _ => { console.log('+++++++ Запрос deleteEntity -- Cardtypes успешно завершен!')})
-                      .catch(error => { console.error('------- ОШИБКА запроса deleteEntity -- Cardtypes:', error)})
+                    () => deleteEntity(membershiptype.type_id, 'type_id', 'membershiptypes')
+                      .then( _ => { console.log('+++++++ Запрос deleteEntity -- Membershiptypes успешно завершен!')})
+                      .catch(error => { console.error('------- ОШИБКА запроса deleteEntity -- Membershiptypes:', error)})
                   }/>
                 </Fab>
               </Tooltip>
@@ -219,9 +202,9 @@ export const Membershiptypes = () => {
               <TextField
                 fullWidth
                 margin="normal"
-                name="card_type_name"
+                name="type_name"
                 label="Тип:"
-                value={formData.card_type_name}
+                value={formData.type_name}
                 onChange={handleChange}
                 slotProps={{
                   inputLabel: {
@@ -232,10 +215,10 @@ export const Membershiptypes = () => {
               <TextField
                 fullWidth
                 margin="normal"
-                name="price"
-                label="Цена:"
+                name="sessions_allowed"
+                label="Кол.-во сеансов:"
                 type="number"
-                value={formData.price}
+                value={formData.sessions_allowed}
                 onChange={handleChange}
                 slotProps={{
                   inputLabel: {
@@ -263,7 +246,6 @@ export const Membershiptypes = () => {
           </Box>
         </>
       }
-
- * 
- * 
- */
+      </Container>
+    )
+  };
