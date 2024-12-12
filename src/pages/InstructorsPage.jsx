@@ -1,13 +1,11 @@
 import React from 'react';
-import { Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
+import { Instructors } from '../components/instructors/Instructors';
 
 export const InstructorsPage = () => {
   return (
     <Container>
-      <Typography variant="h5" sx={{textAlign: 'center', textTransform: 'uppercase'}}>
-        Инструкторы клуба
-      </Typography>
-
+      <Instructors />
     </Container>
   );
 };

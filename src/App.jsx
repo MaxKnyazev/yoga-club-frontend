@@ -29,6 +29,12 @@ export const App = () => {
     getEntityes('membershiptypes')
       .then( _ => { console.log('+++++++ Запрос /membershiptypes успешно завершен!')})
       .catch(error => { console.error('------- ОШИБКА запроса /membershiptypes:', error)});
+    getEntityes('instructors')
+      .then( _ => { console.log('+++++++ Запрос /instructors успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА запроса /instructors:', error)});
+    getEntityes('clubcards')
+      .then( _ => { console.log('+++++++ Запрос /clubcards успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА clubcards /instructors:', error)});
 
 
   }, []);

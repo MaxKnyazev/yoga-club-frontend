@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Typography } from '@mui/material';
-import { useStoreOfYogaClub, getAllClientsSelector } from '../../store';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { styled } from '@mui/material/styles';
@@ -13,64 +12,59 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import Tooltip from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
-import { deleteClient, editClient} from '../../store';
-import { ClientModalNewItem } from './ClientModalNewItem';
-import { ClientModalInfo } from './ClientModalInfo';
 import FormControl from '@mui/material/FormControl';
-
-
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
-// import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import { useStoreOfYogaClub, getAllInstructorsSelector } from '../../store';
+import { deleteEntity, editEntity} from '../../store';
+import { InstructorModalNewItem } from './InstructorModalNewItem';
+import { InstructorModalInfo } from './InstructorModalInfo';
 
 
+  
 
 
+export const Instructors = () => {
+  const instructors = useStoreOfYogaClub(getAllInstructorsSelector);
 
-export const Clients = () => {
-  const clients = useStoreOfYogaClub(getAllClientsSelector);
-
-  const [currentClient, setCurrentClient] = React.useState({});
+  const [currentInstructor, setCurrentInstructor] = React.useState({});
 
   const [openModalNewItem, setOpenModalNewItem] = React.useState(false);
   const handleOpenModalNewItem = () => setOpenModalNewItem(true);
   const handleCloseModalNewItem = () => setOpenModalNewItem(false);
-  
-  const optionsModalNewItem = {
+    const optionsModalNewItem = {
     openModalNewItem,
     handleCloseModalNewItem,
   }
 
   const [openModalInfo, setOpenModalInfo] = React.useState(false);
-  const handleOpenModalInfo = (client) => {
-    setCurrentClient(client);
+  const handleOpenModalInfo = (instructor) => {
+    setCurrentInstructor(instructor);
     setOpenModalInfo(true);
   }
   const handleCloseModalInfo = () => setOpenModalInfo(false);
-
   const optionsModalInfo = {
     openModalInfo,
     handleCloseModalInfo,
-    currentClient,
+    currentInstructor,
   }
 
   const [openModalEditItem, setOpenModalEditItem] = React.useState(false);
-  const handleOpenModalEditItem = (client) => {
-    setCurrentClient(client);//?????????????????????????????????????????
+  const handleOpenModalEditItem = (instructor) => {
+    setCurrentInstructor(instructor);//?????????????????????????????????????????
     setOpenModalEditItem(true);
   }
   const handleCloseModalEditItem = () => setOpenModalEditItem(false);
-
   const optionsModalEditItem = {
     openModalEditItem,
     handleCloseModalEditItem,
-    currentClient,
+    currentInstructor,
   }
 
   // console.log('*************************************************************');
@@ -81,9 +75,9 @@ export const Clients = () => {
   console.log(formData);
   
   const [openEditBlock, setOpenEditBlock] = React.useState(false);
-  const handleOpenEditBlock = (client) => {
-    console.log('handleOpenEditBlock  --> ', client);
-    setFormData({ ...formData, ...client, });
+  const handleOpenEditBlock = (instructor) => {
+    console.log('handleOpenEditBlock  --> ', instructor);
+    setFormData({ ...formData, ...instructor, });
     setOpenEditBlock(true);
   }
 
@@ -100,35 +94,40 @@ export const Clients = () => {
 
   const onChangeSubmit = (data) => {
     // e.preventDefault();
-    // Проверка валидности полей
-    //TODO: Условие на отправку формы ???
-
-    //TODO: Код отправки формы ??? **********************************************
 
     // console.log('data   >>>>>>>>>>>>>>>>>>>>>>>>>>')
     // console.log(data)
-    const { client_id, updatedAt, createdAt, ...putData } = data;
-    // console.log('client_id   >>>>>>>>>>>>>>>>>>>>>>>>>>')
-    // console.log(client_id)
+    const { instructor_id, updatedAt, createdAt, ...putData } = data;
+    // console.log('instructor_id   >>>>>>>>>>>>>>>>>>>>>>>>>>')
+    // console.log(instructor_id)
     // console.log('putData   >>>>>>>>>>>>>>>>>>>>>>>>>>')
     // console.log(putData)
 
 
+    editEntity(instructor_id, 'instructor_id', 'instructors', putData)
+      .then( _ => { console.log('+++++++ Запрос editEntity -- Cardtypes успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА запроса editEntity -- Cardtypes:', error)});
 
 
-    editClient(client_id, putData)
-      .then( _ => { console.log('+++++++ Запрос editClient успешно завершен!')})
-      .catch(error => { console.error('------- ОШИБКА запроса editClient:', error)});
+  // {
+  //   "instructor_id": "6",
+  //   "first_name": "Алексей",
+  //   "last_name": "Лебедев",
+  //   "phone_number": "+7(912)715-87-90",
+  //   "email": "lebedev@example.com",
+  //   "specialization": "татж-йога",
+  //   "experience_years": 1,
+  //   "createdAt": "2024-10-16T13:32:02.000Z",
+  //   "updatedAt": "2024-10-16T13:32:05.000Z"
+  // }
 
-    
     setFormData({
       first_name: '',
       last_name: '',
       phone_number: '',
       email: '',
-      date_of_birth: '',
-      registration_date: '',
-      status: '',
+      specialization: '',
+      experience_years: 0,
     });
 
     setOpenEditBlock(false)
@@ -146,8 +145,6 @@ export const Clients = () => {
     p: 4,
   };
  
-  const statuses = ['активный', 'средний', 'начальный', 'специальный'];
-
   // console.log('*************************************************************');
 
   return (
@@ -159,7 +156,7 @@ export const Clients = () => {
           color: '#141414',
           mb: 2,
         }}>
-        Клиенты клуба
+        Инструкторы клуба
       </Typography>
       <Typography variant="h5" 
         sx={{
@@ -172,9 +169,8 @@ export const Clients = () => {
           </Fab>
         </Tooltip>
       </Typography>
-
-      { clients.map((client) => (
-        <Box key={client.client_id}
+      { instructors.map((instructor) => (
+        <Box key={instructor.instructor_id}
          sx={{ 
           flexGrow: 1,
           paddingBottom: 1, 
@@ -193,10 +189,9 @@ export const Clients = () => {
                   pl: 1,
                   fontWeight: 'bold',
                 }}>
-                {client.first_name} {client.last_name}
+                {instructor.first_name} {instructor.last_name}
               </Typography>
             </Grid>
-
             <Grid
              display="flex" 
              alignItems="center" 
@@ -209,10 +204,9 @@ export const Clients = () => {
                   fontSize: '1rem',
                   pl: 1,
                 }}>
-                Тел.: {client.phone_number} Email: {client.email}
+                Специализация: {instructor.specialization} Опыт работы: {instructor.experience_years}
               </Typography>
             </Grid>
-
             <Grid
              display="flex" 
              justifyContent="space-around" 
@@ -221,22 +215,21 @@ export const Clients = () => {
             >
               <Tooltip title="Изменить...">
                 <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee', zIndex: 0}}>
-                  <EditIcon onClick={() => handleOpenEditBlock(client)}/>
+                  <EditIcon onClick={() => handleOpenEditBlock(instructor)}/>
                 </Fab>
               </Tooltip>
               <Tooltip title="Удалить...">
                 <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890', zIndex: 0}}>
                   <DeleteIcon onClick={
-                    () => deleteClient(client.client_id)
-                      .then( _ => { console.log('+++++++ Запрос deleteClient успешно завершен!')})
-                      .catch(error => { console.error('------- ОШИБКА запроса deleteClient:', error)})
-                
+                    () => deleteEntity(instructor.instructor_id, 'instructor_id', 'instructors')
+                      .then( _ => { console.log('+++++++ Запрос deleteEntity -- Instructors успешно завершен!')})
+                      .catch(error => { console.error('------- ОШИБКА запроса deleteEntity -- Instructors:', error)})
                   }/>
                 </Fab>
               </Tooltip>
               <Tooltip title="Подробнее...">
                 <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b', zIndex: 0}}>
-                  <SendIcon onClick={() => handleOpenModalInfo(client)}/>
+                  <SendIcon onClick={() => handleOpenModalInfo(instructor)}/>
                 </Fab>
               </Tooltip>
             </Grid>
@@ -244,8 +237,8 @@ export const Clients = () => {
         </Box>
       ))}
 
-      <ClientModalNewItem {...optionsModalNewItem}/>
-      <ClientModalInfo {...optionsModalInfo}/>
+      <InstructorModalInfo {...optionsModalInfo}/>
+      <InstructorModalNewItem {...optionsModalNewItem}/>
 
       { openEditBlock && 
         <>
@@ -254,7 +247,6 @@ export const Clients = () => {
               Внесите изменения:           
             </Typography>
             <Box component="form" sx={{ mt: 2 }}>
-      
               <TextField
                 fullWidth
                 margin="normal"
@@ -312,11 +304,9 @@ export const Clients = () => {
               <TextField
                 fullWidth
                 margin="normal"
-                name="date_of_birth"
-                type="datetime-local"
-                label="Дата рождения:"
-                // value="2024-02-21T05:12:01.455Z"
-                value={(""+formData.date_of_birth).substring(0, 19)}
+                name="specialization"
+                label="Специализация:"
+                value={formData.specialization}
                 onChange={handleChange}
                 slotProps={{
                   inputLabel: {
@@ -327,11 +317,10 @@ export const Clients = () => {
               <TextField
                 fullWidth
                 margin="normal"
-                name="registration_date"
-                type="datetime-local"
-                label="Дата регистрации:"
-                // value="2024-02-21T05:12"
-                value={(""+formData.registration_date).substring(0, 19)}
+                name="experience_years"
+                type="number"
+                label="Кол.-во лет опыта:"
+                value={formData.experience_years}
                 onChange={handleChange}
                 slotProps={{
                   inputLabel: {
@@ -339,21 +328,6 @@ export const Clients = () => {
                   },
                 }}
               />
-              <FormControl fullWidth margin="normal">
-                <InputLabel id="status-select-label">Статус</InputLabel>
-                <Select
-                  labelId="status-select-label"
-                  name="status"
-                  // value="активный"
-                  value={formData.status}
-                  onChange={handleChange}
-                  label="Статус:"
-                >
-                  {statuses.map((status) => (
-                    <MenuItem key={status} value={status}>{status}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
               <Box sx={{display: "flex", justifyContent: "space-between"}}>
                 <Button
                  variant="contained" 
@@ -369,12 +343,113 @@ export const Clients = () => {
                 >
                   Отменить
                 </Button>
-                
               </Box>
             </Box>
           </Box>
          </>
       }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
       </Container>
     )
   };
+
+
+  /*
+
+
+      { instructors.map((instructor) => (
+        <Box key={instructor.instructor_id}
+         sx={{ 
+          flexGrow: 1,
+          paddingBottom: 1, 
+        }}>
+          <Grid container spacing={0}>
+
+            <Grid
+             display="flex"
+             alignItems="center" 
+             size={{ xs: 12, sm: 8, md: 4 }}
+             sx={{borderBottom: '1px solid #1976d2'}}
+            >
+              <Typography variant="subtitle1"
+                sx={{
+                  color: '#141414',
+                  fontSize: '1.2rem',
+                  pl: 1,
+                  fontWeight: 'bold',
+                }}>
+                {instructor.first_name} {instructor.last_name}
+              </Typography>
+            </Grid>
+
+            <Grid
+             display="flex" 
+             alignItems="center" 
+             size={{ xs: 12, sm: 8, md: 6 }}
+             sx={{borderBottom: '1px solid #1976d2'}}
+            >
+              <Typography variant="subtitle1" 
+                sx={{
+                  color: '#141414',
+                  fontSize: '1rem',
+                  pl: 1,
+                }}>
+                Тел.: {instructor.phone_number} Email: {instructor.email}
+              </Typography>
+            </Grid>
+
+            <Grid
+             display="flex" 
+             justifyContent="space-around" 
+             alignItems="center" 
+             size={{ xs: 12, sm: 4, md: 2 }}
+            >
+              <Tooltip title="Изменить...">
+                <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee', zIndex: 0}}>
+                  <EditIcon onClick={() => handleOpenEditBlock(instructor)}/>
+                </Fab>
+              </Tooltip>
+              <Tooltip title="Удалить...">
+                <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890', zIndex: 0}}>
+                  <DeleteIcon onClick={
+                    () => deleteinstructor(instructor.instructor_id)
+                      .then( _ => { console.log('+++++++ Запрос deleteinstructor успешно завершен!')})
+                      .catch(error => { console.error('------- ОШИБКА запроса deleteinstructor:', error)})
+                
+                  }/>
+                </Fab>
+              </Tooltip>
+              <Tooltip title="Подробнее...">
+                <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b', zIndex: 0}}>
+                  <SendIcon onClick={() => handleOpenModalInfo(instructor)}/>
+                </Fab>
+              </Tooltip>
+            </Grid>
+          </Grid>
+        </Box>
+      ))}
+
+      <instructorModalNewItem {...optionsModalNewItem}/>
+      <instructorModalInfo {...optionsModalInfo}/>
+
+
+
+
+  */

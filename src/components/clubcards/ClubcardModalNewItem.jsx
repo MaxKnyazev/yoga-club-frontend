@@ -6,9 +6,13 @@ import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 import { addNewEntity } from '../../store';
 
-export const InstructorModalNewItem = ({openModalNewItem, handleCloseModalNewItem}) => {
+export const ClubcardModalNewItem = ({openModalNewItem, handleCloseModalNewItem}) => {
   const initialData = {
     first_name: '',
     last_name: '',
@@ -17,18 +21,18 @@ export const InstructorModalNewItem = ({openModalNewItem, handleCloseModalNewIte
     specialization: '',
     experience_years: 0,
 }
-  const [formInstructor, setFormInstructor] = React.useState(initialData);
+
+  const [formClient, setFormClient] = React.useState(initialData);
 
 // {
-//   "instructor_id": "6",
-//   "first_name": "Алексей",
-//   "last_name": "Лебедев",
-//   "phone_number": "+7(912)715-87-90",
-//   "email": "lebedev@example.com",
-//   "specialization": "татж-йога",
-//   "experience_years": 1,
-//   "createdAt": "2024-10-16T13:32:02.000Z",
-//   "updatedAt": "2024-10-16T13:32:05.000Z"
+//   "card_id": "2",
+//   "client_id": 1,
+//   "card_type_id": 3,
+//   "start_date": "2024-10-01T13:32:51.000Z",
+//   "end_date": "2024-10-06T23:12:11.000Z",
+//   "status": "активна",
+//   "createdAt": "2024-10-01T13:32:51.000Z",
+//   "updatedAt": "2024-10-06T23:12:11.000Z"
 // }
 
   const style = {
@@ -45,23 +49,25 @@ export const InstructorModalNewItem = ({openModalNewItem, handleCloseModalNewIte
   
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormInstructor(prevData => ({
+    setFormClient(prevData => ({
       ...prevData,
       [name]: value,
     }));
   };
 
+  const statuses = ['активный', 'средний', 'начальный', 'специальный'];
+
   const onChangeSubmit = (e) => {
     e.preventDefault();
 
-    // console.log('formInstructor-----------------------------------');
-    // console.log(formInstructor);
-    
-    addNewEntity('instructor_id', 'instructors', formInstructor)
-      .then( _ => { console.log(`+++++++ Запрос addNewEntity -- InstructorModalNewItem успешно завершен!`)})
-      .catch(error => { console.error(`------- ОШИБКА запроса addNewEntity -- InstructorModalNewItem!`, error)});
-    
-    setFormInstructor(initialData);
+    // console.log('formClient-----------------------------------');
+    // console.log(formClient);
+
+    addNewEntity('clients_id', 'clients', formClient)
+      .then( _ => { console.log(`+++++++ Запрос addNewEntity успешно завершен!`)})
+      .catch(error => { console.error(`------- ОШИБКА запроса addNewEntity!`, error)});
+
+    setFormClient(initialData);
     handleCloseModalNewItem()
   }
 
@@ -90,7 +96,7 @@ export const InstructorModalNewItem = ({openModalNewItem, handleCloseModalNewIte
               margin="normal"
               name="first_name"
               label="Имя:"
-              value={formInstructor.first_name}
+              value={formClient.first_name}
               onChange={handleChange}
             />
             <TextField
@@ -98,7 +104,7 @@ export const InstructorModalNewItem = ({openModalNewItem, handleCloseModalNewIte
               margin="normal"
               name="last_name"
               label="Фамилия:"
-              value={formInstructor.last_name}
+              value={formClient.last_name}
               onChange={handleChange}
             />
             <TextField
@@ -107,7 +113,7 @@ export const InstructorModalNewItem = ({openModalNewItem, handleCloseModalNewIte
               name="phone_number"
               label="Телефон:"
               type="tel"
-              value={formInstructor.phone_number}
+              value={formClient.phone_number}
               onChange={handleChange}
             />
             <TextField
@@ -116,15 +122,16 @@ export const InstructorModalNewItem = ({openModalNewItem, handleCloseModalNewIte
               name="email"
               label="Email:"
               type="email"
-              value={formInstructor.email}
+              value={formClient.email}
               onChange={handleChange}
             />
             <TextField
               fullWidth
               margin="normal"
-              name="specialization"
-              label="Специализация:"
-              value={formInstructor.specialization}
+              name="date_of_birth"
+              type="datetime-local"
+              label="Дата рождения:"
+              value={formClient.date_of_birth}
               onChange={handleChange}
               slotProps={{
                 inputLabel: {
@@ -135,10 +142,10 @@ export const InstructorModalNewItem = ({openModalNewItem, handleCloseModalNewIte
             <TextField
               fullWidth
               margin="normal"
-              name="experience_years"
-              type="number"
-              label="Кол.-во лет опыта:"
-              value={formInstructor.experience_years}
+              name="registration_date"
+              type="datetime-local"
+              label="Дата регистрации:"
+              value={formClient.registration_date}
               onChange={handleChange}
               slotProps={{
                 inputLabel: {
@@ -146,6 +153,20 @@ export const InstructorModalNewItem = ({openModalNewItem, handleCloseModalNewIte
                 },
               }}
             />
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="status-select-label">Статус</InputLabel>
+              <Select
+                labelId="status-select-label"
+                name="status"
+                value={formClient.status}
+                onChange={handleChange}
+                label="Статус:"
+              >
+                {statuses.map((status) => (
+                  <MenuItem key={status} value={status}>{status}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <Button
              variant="contained" 
              sx={{ mt: 2 }}
