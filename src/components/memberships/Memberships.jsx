@@ -23,6 +23,21 @@ import {
 import { deleteEntity, editEntity} from '../../store';
 import { MembershipModalNewItem } from './MembershipModalNewItem';
 import { MembershipModalInfo } from './MembershipModalInfo';
+import { Error } from '../Error';
+
+
+
+
+//.....................................................................................
+//.....................................................................................
+//.....................................................................................
+//.....................................................................................
+//.....................................................................................
+//..................................................................<Error />
+//..................................................................Fab
+
+
+
 
 export const Memberships = () => {
   const memberships = useStoreOfYogaClub(getAllMembershipsSelector);
@@ -50,14 +65,12 @@ export const Memberships = () => {
   }
 
 
-//......................................................................................
-//......................................................................................
-//......................................................................................
-console.log('__memberships')
-console.log(__memberships)
+// console.log('__memberships')
+// console.log(__memberships)
 
+  const [errorMessage, setErrorMessage] = React.useState('');
 
-  const [currentClubcard, setCurrentClubcard] = React.useState({});
+  const [currentMembership, setCurrentMembership] = React.useState({});
 
   const [openModalNewItem, setOpenModalNewItem] = React.useState(false);
   const handleOpenModalNewItem = () => setOpenModalNewItem(true);
@@ -68,27 +81,27 @@ console.log(__memberships)
   }
 
   const [openModalInfo, setOpenModalInfo] = React.useState(false);
-  const handleOpenModalInfo = (clubcard) => {
-    setCurrentClubcard(clubcard);
+  const handleOpenModalInfo = (membership) => {
+    setCurrentMembership(membership);
     setOpenModalInfo(true);
   }
   const handleCloseModalInfo = () => setOpenModalInfo(false);
   const optionsModalInfo = {
     openModalInfo,
     handleCloseModalInfo,
-    currentClubcard,
+    currentMembership,
   }
 
   const [openModalEditItem, setOpenModalEditItem] = React.useState(false);
-  const handleOpenModalEditItem = (clubcard) => {
-    setCurrentClubcard(clubcard);
+  const handleOpenModalEditItem = (membership) => {
+    setCurrentMembership(membership);
     setOpenModalEditItem(true);
   }
   const handleCloseModalEditItem = () => setOpenModalEditItem(false);
   const optionsModalEditItem = {
     openModalEditItem,
     handleCloseModalEditItem,
-    currentClubcard,
+    currentMembership,
   }
 
   // console.log('*************************************************************');
@@ -99,9 +112,9 @@ console.log(__memberships)
   // console.log(formData);
   
   const [openEditBlock, setOpenEditBlock] = React.useState(false);
-  const handleOpenEditBlock = (clubcard) => {
-    console.log('handleOpenEditBlock  --> ', clubcard);
-    setFormData({ ...formData, ...clubcard, });
+  const handleOpenEditBlock = (membership) => {
+    console.log('handleOpenEditBlock  --> ', membership);
+    setFormData({ ...formData, ...membership, });
     setOpenEditBlock(true);
   }
 
@@ -119,7 +132,7 @@ console.log(__memberships)
   const onChangeSubmit = (data) => {
     // console.log('data   >>>>>>>>>>>>>>>>>>>>>>>>>>')
     // console.log(data)
-    const { card_id, updatedAt, createdAt, card_type_name, client_name, ...putData } = data;
+    const { memberships_id, updatedAt, createdAt, type_name, client_name, ...putData } = data;
     // console.log('card_id   >>>>>>>>>>>>>>>>>>>>>>>>>>')
     // console.log(card_id)
     // console.log('putData   >>>>>>>>>>>>>>>>>>>>>>>>>>')
@@ -155,17 +168,18 @@ console.log(__memberships)
 // }
 
 
-    editEntity(card_id, 'card_id', 'clubcards', putData)
-      .then( _ => { console.log('+++++++ Запрос editEntity -- Clubcards успешно завершен!')})
-      .catch(error => { console.error('------- ОШИБКА запроса editEntity -- Clubcards:', error)});
+    editEntity(memberships_id, 'memberships_id', 'memberships', putData)
+      .then( _ => { console.log('+++++++ Запрос editEntity -- Memberships успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА запроса editEntity -- Memberships:', error)});
 
     setFormData({
       client_id: '',
-      card_type_id: '',
+      type_id: '',
       start_date: '',
       end_date: '',
-      status: '',
-    });
+      price: '',
+      sessions_used: '',
+  });
 
     setOpenEditBlock(false)
   }
@@ -181,8 +195,6 @@ console.log(__memberships)
     boxShadow: 24,
     p: 4,
   };
- 
-  // const statuses = ['активный', 'средний', 'начальный', 'специальный'];
 
   // console.log('*************************************************************');
 
@@ -208,21 +220,9 @@ console.log(__memberships)
           </Fab>
         </Tooltip>
       </Typography>
-
-
-
-
-
-      </Container>
-    )
-  };
-  
-
-
-  /*
-
-      { __cards.map((card) => (
-        <Box key={card.card_id}
+      {errorMessage && <Error setErrorMessage={setErrorMessage} errorMessage={`${errorMessage}`}/>}
+      { __memberships.map((membership) => (
+        <Box key={membership.memberships_id}
          sx={{ 
           flexGrow: 1,
           paddingBottom: 1, 
@@ -241,7 +241,7 @@ console.log(__memberships)
                   pl: 1,
                   fontWeight: 'bold',
                 }}>
-                {card.client_name}
+                {membership.client_name}
               </Typography>
             </Grid>
             <Grid
@@ -256,7 +256,7 @@ console.log(__memberships)
                   fontSize: '1rem',
                   pl: 1,
                 }}>
-                Тип: {card.card_type_name} Статус: {card.status}
+                Тип: {membership.type_name} Цена: {membership.price}
               </Typography>
             </Grid>
             <Grid
@@ -271,7 +271,7 @@ console.log(__memberships)
                   fontSize: '1rem',
                   pl: 1,
                 }}>
-                Дата начала: {card.start_date} Дата окончания: {card.end_date}
+                Дата начала: {membership.start_date} Дата окончания: {membership.end_date}
               </Typography>
             </Grid>
             <Grid
@@ -281,22 +281,40 @@ console.log(__memberships)
              size={{ xs: 12, sm: 4, md: 2 }}
             >
               <Tooltip title="Изменить...">
-                <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee', zIndex: 0}}>
-                  <EditIcon onClick={() => handleOpenEditBlock(card)}/>
+                <Fab 
+                  size="small" 
+                  aria-label="edit" 
+                  sx={{backgroundColor: '#df87ee', zIndex: 0}}
+                  onClick={() => handleOpenEditBlock(membership)}
+                >
+                  <EditIcon />
                 </Fab>
               </Tooltip>
               <Tooltip title="Удалить...">
-                <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890', zIndex: 0}}>
-                  <DeleteIcon onClick={
-                    () => deleteEntity(card.card_id, 'card_id', 'clubcards')
-                      .then( _ => { console.log('+++++++ Запрос deleteEntity -- Clubcards успешно завершен!')})
-                      .catch(error => { console.error('------- ОШИБКА запроса deleteEntity -- Clubcards:', error)})
-                  }/>
+                <Fab 
+                  size="small" 
+                  aria-label="delete" 
+                  sx={{backgroundColor: '#ff9890', zIndex: 0}}
+                  onClick={
+                    () => deleteEntity(membership.memberships_id, 'memberships_id', 'memberships')
+                      .then( _ => { console.log('+++++++ Запрос deleteEntity -- Memberships успешно завершен!')})
+                      .catch(error => { 
+                        console.error('------- ОШИБКА запроса deleteEntity -- Memberships:', error);
+                        setErrorMessage(error)
+                      })
+                  }
+                >
+                  <DeleteIcon />
                 </Fab>
               </Tooltip>
               <Tooltip title="Подробнее...">
-                <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b', zIndex: 0}}>
-                  <SendIcon onClick={() => handleOpenModalInfo(card)}/>
+                <Fab 
+                  size="small" 
+                  aria-label="send" 
+                  sx={{backgroundColor: '#ffeb3b', zIndex: 0}}
+                  onClick={() => handleOpenModalInfo(membership)}
+                >
+                  <SendIcon />
                 </Fab>
               </Tooltip>
             </Grid>
@@ -304,8 +322,8 @@ console.log(__memberships)
         </Box>
       ))}
 
-      <ClubcardModalInfo {...optionsModalInfo}/>
-      <ClubcardModalNewItem {...optionsModalNewItem}/>
+      <MembershipModalInfo {...optionsModalInfo}/>
+      <MembershipModalNewItem {...optionsModalNewItem}/>
 
       { openEditBlock && 
         <>
@@ -334,20 +352,20 @@ console.log(__memberships)
                 </Select>
               </FormControl>
               <FormControl fullWidth margin="normal">
-                <InputLabel id="cards-select-label">Тип карты</InputLabel>
+                <InputLabel id="membershiptype-select-label">Тип карты</InputLabel>
                 <Select
-                  labelId="cards-select-label"
-                  name="card_type_id"
-                  value={formData.card_type_id}
+                  labelId="membershiptype-select-label"
+                  name="type_id"
+                  value={formData.type_id}
                   onChange={handleChange}
                   label="Тип карты:"
                 >
-                  {cardtypes.map((cardtype) => (
+                  {membershiptypes.map((membershiptype) => (
                     <MenuItem 
-                      key={cardtype.card_type_name} 
-                      value={cardtype.card_type_id}
+                      key={membershiptype.type_id} 
+                      value={membershiptype.type_id}
                     >
-                      {cardtype.card_type_name}
+                      {membershiptype.type_name}
                     </MenuItem>
                   ))}
                 </Select>
@@ -357,7 +375,7 @@ console.log(__memberships)
                 margin="normal"
                 name="start_date"
                 type="datetime-local"
-                label="Дата рождения:"
+                label="Дата начала:"
                 value={(""+formData.start_date).substring(0, 19)}
                 onChange={handleChange}
                 slotProps={{
@@ -371,7 +389,7 @@ console.log(__memberships)
                 margin="normal"
                 name="end_date"
                 type="datetime-local"
-                label="Дата начала:"
+                label="Дата окончания:"
                 value={(""+formData.end_date).substring(0, 19)}
                 onChange={handleChange}
                 slotProps={{
@@ -380,20 +398,34 @@ console.log(__memberships)
                   },
                 }}
               />
-              <FormControl fullWidth margin="normal">
-                <InputLabel id="status-select-label">Статус</InputLabel>
-                <Select
-                  labelId="status-select-label"
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                  label="Статус:"
-                >
-                  {statuses.map((status) => (
-                    <MenuItem key={status} value={status}>{status}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <TextField
+                fullWidth
+                margin="normal"
+                name="price"
+                type="number"
+                label="Цена:"
+                value={formData.price}
+                onChange={handleChange}
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                name="sessions_used"
+                type="number"
+                label="Кол.-во отработанных занятий:"
+                value={formData.sessions_used}
+                onChange={handleChange}
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+              />
               <Box sx={{display: "flex", justifyContent: "space-between"}}>
                 <Button
                  variant="contained" 
@@ -410,11 +442,10 @@ console.log(__memberships)
                   Отменить
                 </Button>
               </Box>
-
             </Box>
           </Box>
          </>
       }
-
-
-  */
+    </Container>
+    )
+  };

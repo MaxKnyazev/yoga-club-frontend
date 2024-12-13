@@ -11,25 +11,26 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import { 
+  useStoreOfYogaClub, 
+  getAllMembershiptypesSelector,
+  getAllClientsSelector,
   addNewEntity, 
-  getAllCardtypesSelector, 
-  getAllClientsSelector, 
-  useStoreOfYogaClub
 } from '../../store';
 
 export const MembershipModalNewItem = ({openModalNewItem, handleCloseModalNewItem}) => {
   const initialData = {
     client_id: '',
-    card_type_id: '',
+    type_id: '',
     start_date: '',
     end_date: '',
-    status: '',
+    price: '',
+    sessions_used: '',
   }
 
-  const cardtypes = useStoreOfYogaClub(getAllCardtypesSelector);
+  const membershiptypes = useStoreOfYogaClub(getAllMembershiptypesSelector);
   const clients = useStoreOfYogaClub(getAllClientsSelector);
 
-  const [formClubcard, setFormClubcard] = React.useState(initialData);
+  const [formMembership, setFormMembership] = React.useState(initialData);
 
 
     // "memberships_id": "4",
@@ -74,25 +75,25 @@ export const MembershipModalNewItem = ({openModalNewItem, handleCloseModalNewIte
   
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormClubcard(prevData => ({
+    setFormMembership(prevData => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const statuses = ['активный', 'средний', 'начальный', 'специальный'];
+  // const statuses = ['активный', 'средний', 'начальный', 'специальный'];
 
   const onChangeSubmit = (e) => {
     e.preventDefault();
 
-    // console.log('formClubcard-----------------------------------');
-    // console.log(formClubcard);
+    // console.log('formMembership-----------------------------------');
+    // console.log(formMembership);
 
-    addNewEntity('card_id', 'clubcards', formClubcard)
-      .then( _ => { console.log(`+++++++ Запрос addNewEntity -- ClubcardModalNewItem успешно завершен!`)})
-      .catch(error => { console.error(`------- ОШИБКА запроса addNewEntity -- ClubcardModalNewItem!`, error)});
+    addNewEntity('memberships_id', 'memberships', formMembership)
+      .then( _ => { console.log(`+++++++ Запрос addNewEntity -- MembershipModalNewItem успешно завершен!`)})
+      .catch(error => { console.error(`------- ОШИБКА запроса addNewEntity -- MembershipModalNewItem!`, error)});
 
-    setFormClubcard(initialData);
+    setFormMembership(initialData);
     handleCloseModalNewItem()
   }
 
@@ -113,7 +114,7 @@ export const MembershipModalNewItem = ({openModalNewItem, handleCloseModalNewIte
       <Fade in={openModalNewItem}>
         <Box sx={style}>
           <Typography id="transition-modal-title" variant="h6" component="h2">
-            Новая карта клуба:           
+            Новый член клуба:           
           </Typography>
           
           <Box component="form" sx={{ mt: 2 }}>
@@ -125,7 +126,7 @@ export const MembershipModalNewItem = ({openModalNewItem, handleCloseModalNewIte
               <Select
                 labelId="client-select-label"
                 name="client_id"
-                value={formClubcard.client_id}
+                value={formMembership.client_id}
                 onChange={handleChange}
                 label="Клиент:"
               >
@@ -140,20 +141,20 @@ export const MembershipModalNewItem = ({openModalNewItem, handleCloseModalNewIte
               </Select>
             </FormControl>
             <FormControl fullWidth margin="normal">
-              <InputLabel id="cards-select-label">Тип карты</InputLabel>
+              <InputLabel id="membership-select-label">Тип членства</InputLabel>
               <Select
-                labelId="cards-select-label"
-                name="card_type_id"
-                value={formClubcard.card_type_id}
+                labelId="membership-select-label"
+                name="type_id"
+                value={formMembership.type_id}
                 onChange={handleChange}
-                label="Тип карты:"
+                label="Тип членства:"
               >
-                {cardtypes.map((cardtype) => (
+                {membershiptypes.map((membershiptype) => (
                   <MenuItem 
-                    key={cardtype.card_type_name} 
-                    value={cardtype.card_type_id}
+                    key={membershiptype.type_id} 
+                    value={membershiptype.type_id}
                   >
-                    {cardtype.card_type_name}
+                    {membershiptype.type_name}
                   </MenuItem>
                 ))}
               </Select>
@@ -164,7 +165,7 @@ export const MembershipModalNewItem = ({openModalNewItem, handleCloseModalNewIte
               name="start_date"
               type="datetime-local"
               label="Дата начала:"
-              value={formClubcard.start_date}
+              value={formMembership.start_date}
               onChange={handleChange}
               slotProps={{
                 inputLabel: {
@@ -178,7 +179,7 @@ export const MembershipModalNewItem = ({openModalNewItem, handleCloseModalNewIte
               name="end_date"
               type="datetime-local"
               label="Дата окончания:"
-              value={formClubcard.end_date}
+              value={formMembership.end_date}
               onChange={handleChange}
               slotProps={{
                 inputLabel: {
@@ -186,20 +187,34 @@ export const MembershipModalNewItem = ({openModalNewItem, handleCloseModalNewIte
                 },
               }}
             />
-            <FormControl fullWidth margin="normal">
-              <InputLabel id="status-select-label">Статус</InputLabel>
-              <Select
-                labelId="status-select-label"
-                name="status"
-                value={formClubcard.status}
-                onChange={handleChange}
-                label="Статус:"
-              >
-                {statuses.map((status) => (
-                  <MenuItem key={status} value={status}>{status}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <TextField
+              fullWidth
+              margin="normal"
+              name="price"
+              type="number"
+              label="Цена:"
+              value={formMembership.price}
+              onChange={handleChange}
+              slotProps={{
+                inputLabel: {
+                  shrink: true,
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              name="sessions_used"
+              type="number"
+              label="Кол.-во отработанных занятий:"
+              value={formMembership.sessions_used}
+              onChange={handleChange}
+              slotProps={{
+                inputLabel: {
+                  shrink: true,
+                },
+              }}
+            />
             <Button
              variant="contained" 
              sx={{ mt: 2 }}

@@ -34,8 +34,8 @@ import { InfoValue } from '../InfoValue';
 // }
 
 
-export const MembershipModalInfo = ({openModalInfo, handleCloseModalInfo, currentClubcard}) => { 
-  const { client_name, card_type_name, status, start_date, end_date} = currentClubcard;
+export const MembershipModalInfo = ({openModalInfo, handleCloseModalInfo, currentMembership}) => { 
+  const { client_name, type_name, price, start_date, end_date, sessions_used} = currentMembership;
   const style = {
     position: 'absolute',
     top: '50%',
@@ -79,19 +79,17 @@ export const MembershipModalInfo = ({openModalInfo, handleCloseModalInfo, curren
             paddingBottom: 1, 
           }}>
             <InfoValue title={'ФИО клиента:'} value={`${client_name}`} />
-            <InfoValue title={'Тип карты:'} value={`${card_type_name}`} />
-            <InfoValue title={'Статус:'} value={`${status}`} />
+            <InfoValue title={'Тип членства:'} value={`${type_name}`} />
+            <InfoValue title={'Цена:'} value={`${price}`} />
             <InfoValue title={'Дата начала:'} value={`${start_date}`} />
             <InfoValue title={'Дата окончания:'} value={`${end_date}`} />
+            <InfoValue title={'Кол.-во отработанных занятий:'} value={`${sessions_used}`} />
           </Box>
         </Box>
       </Fade>
     </Modal>
   );
 }
-
-
-
 
 
 

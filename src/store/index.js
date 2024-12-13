@@ -87,24 +87,35 @@ export const addNewEntity = async (idTitle, endpoint, data) => {
  * @param {*} endpoint - например "cardtypes" 
  */
 export const deleteEntity = async (entityId, idTitle, endpoint) => {
-  const response = await sendDeleteRequest(`${BASE_URL}/${endpoint}`, entityId);
-  // console.log('response .....................')
-  // console.log(response)
-  const id = response.result;
-  // console.log('id .....................')
-  // console.log(id)
-  const state = useStoreOfYogaClub.getState();
-  // console.log('state .....................')
-  // console.log(state)
-  const filteredResult = state[`${endpoint}`].result.filter((client) => +client[`${idTitle}`] !== id);
-  // console.log('filteredResult .....................')
-  // console.log(filteredResult)
-  useStoreOfYogaClub.setState(
-    // {clients: {result: filteredResult, error:''}}
-    (state) => { 
-      return {...state, [`${endpoint}`]: {result: filteredResult}, error: ''}
+  try {
+    const response = await sendDeleteRequest(`${BASE_URL}/${endpoint}`, entityId);
+  
+    console.log('response deleteEntity.....................')
+    console.log(response.error)
+
+    if (response.error !== 'null') {
+      throw new Error(response.error);
     }
-  )
+    
+    const id = response.result;
+    // console.log('id .....................')
+    // console.log(id)
+    const state = useStoreOfYogaClub.getState();
+    // console.log('state .....................')
+    // console.log(state)
+  
+      const filteredResult = state[`${endpoint}`].result.filter((client) => +client[`${idTitle}`] !== id);
+      // console.log('filteredResult .....................')
+      // console.log(filteredResult)
+      useStoreOfYogaClub.setState(
+        // {clients: {result: filteredResult, error:''}}
+        (state) => { 
+          return {...state, [`${endpoint}`]: {result: filteredResult}, error: ''}
+        }
+      )
+  } catch (error) {
+    throw new Error(error)
+  }
 }
 
 /**
