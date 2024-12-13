@@ -6,7 +6,35 @@ import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import { InfoValue } from '../InfoValue';
 
-export const ClubcardModalInfo = ({openModalInfo, handleCloseModalInfo, currentClubcard}) => { 
+    // "memberships_id": "4",
+    // "client_id": 3,
+    // "type_id": 2,
+    // "start_date": "2024-11-11T00:00:00.000Z",
+    // "end_date": "2024-11-11T00:00:00.000Z",
+    // "price": 200,
+    // "sessions_used": 2,
+    // "createdAt": "2024-11-11T13:07:00.571Z",
+    // "updatedAt": "2024-11-11T13:07:00.571Z"
+
+    // {
+  // memberships_id
+  
+  //// type_id
+  //// type_name
+  //// client_id
+    // client_name
+
+    // start_date
+    // end_date
+    // price
+    // sessions_used
+  
+  // createdAt
+  // updatedAt
+// }
+
+
+export const MembershipModalInfo = ({openModalInfo, handleCloseModalInfo, currentClubcard}) => { 
   const { client_name, card_type_name, status, start_date, end_date} = currentClubcard;
   const style = {
     position: 'absolute',

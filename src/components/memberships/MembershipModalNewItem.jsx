@@ -17,7 +17,7 @@ import {
   useStoreOfYogaClub
 } from '../../store';
 
-export const ClubcardModalNewItem = ({openModalNewItem, handleCloseModalNewItem}) => {
+export const MembershipModalNewItem = ({openModalNewItem, handleCloseModalNewItem}) => {
   const initialData = {
     client_id: '',
     card_type_id: '',
@@ -32,27 +32,28 @@ export const ClubcardModalNewItem = ({openModalNewItem, handleCloseModalNewItem}
   const [formClubcard, setFormClubcard] = React.useState(initialData);
 
 
-// {
-//   "card_id": "2",
-//   "client_id": 1,
-//   "card_type_id": 3,
-//   "start_date": "2024-10-01T13:32:51.000Z",
-//   "end_date": "2024-10-06T23:12:11.000Z",
-//   "status": "активна",
-//   "createdAt": "2024-10-01T13:32:51.000Z",
-//   "updatedAt": "2024-10-06T23:12:11.000Z"
-// }
+    // "memberships_id": "4",
+    // "client_id": 3,
+    // "type_id": 2,
+    // "start_date": "2024-11-11T00:00:00.000Z",
+    // "end_date": "2024-11-11T00:00:00.000Z",
+    // "price": 200,
+    // "sessions_used": 2,
+    // "createdAt": "2024-11-11T13:07:00.571Z",
+    // "updatedAt": "2024-11-11T13:07:00.571Z"
 
 // {
-  // card_id
-  // card_type_id
-  // client_id
+  // memberships_id
   
-  // client_name
-  // card_type_name
-  // status
-  // start_date
-  // end_date
+  //// type_id
+  //// type_name
+  //// client_id
+    // client_name
+
+    // start_date
+    // end_date
+    // price
+    // sessions_used
   
   // createdAt
   // updatedAt

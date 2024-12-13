@@ -16,38 +16,46 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { 
   useStoreOfYogaClub, 
-  getAllClubcardsSelector,
-  getAllCardtypesSelector,
+  getAllMembershipsSelector,
+  getAllMembershiptypesSelector,
   getAllClientsSelector
 } from '../../store';
 import { deleteEntity, editEntity} from '../../store';
-import { ClubcardModalNewItem } from './ClubcardModalNewItem';
-import { ClubcardModalInfo } from './ClubcardModalInfo';
+import { MembershipModalNewItem } from './MembershipModalNewItem';
+import { MembershipModalInfo } from './MembershipModalInfo';
 
-export const Clubcards = () => {
-  const clubcards = useStoreOfYogaClub(getAllClubcardsSelector);
-  const cardtypes = useStoreOfYogaClub(getAllCardtypesSelector);
+export const Memberships = () => {
+  const memberships = useStoreOfYogaClub(getAllMembershipsSelector);
+  const membershiptypes = useStoreOfYogaClub(getAllMembershiptypesSelector);
   const clients = useStoreOfYogaClub(getAllClientsSelector);
 
-  let _cards = [];
-  for(let clubcard of clubcards) {
-    for(const cardtype of cardtypes) {
-      if(+clubcard.card_type_id === +cardtype.card_type_id) {
-        clubcard = {...clubcard, card_type_name: cardtype.card_type_name}
-        _cards.push(clubcard)
+  let _memberships = [];
+  for(let membership of memberships) {
+    for(const membershiptype of membershiptypes) {
+      if(+membership.type_id === +membershiptype.type_id) {
+        membership = {...membership, type_name: membershiptype.type_name}
+        _memberships.push(membership)
       }
     }
   }
   
-  let __cards = [];
-  for(let clubcard of _cards) {
+  let __memberships = [];
+  for(let membership of _memberships) {
     for(const client of clients) {
-      if(+clubcard.client_id === +client.client_id) {
-        clubcard = {...clubcard, client_name: `${client.first_name} ${client.last_name}`}
-        __cards.push(clubcard)
+      if(+membership.client_id === +client.client_id) {
+        membership = {...membership, client_name: `${client.first_name} ${client.last_name}`}
+        __memberships.push(membership)
       }
     }
   }
+
+
+//......................................................................................
+//......................................................................................
+//......................................................................................
+console.log('__memberships')
+console.log(__memberships)
+
 
   const [currentClubcard, setCurrentClubcard] = React.useState({});
 
@@ -118,29 +126,29 @@ export const Clubcards = () => {
     // console.log(putData)
 
 
-// {
-//   "card_id": "2",
-//   "client_id": 1,
-//   "card_type_id": 3,
-//   "start_date": "2024-10-01T13:32:51.000Z",
-//   "end_date": "2024-10-06T23:12:11.000Z",
-//   "status": "активна",
-//   "createdAt": "2024-10-01T13:32:51.000Z",
-//   "updatedAt": "2024-10-06T23:12:11.000Z"
-// }
+    // "memberships_id": "4",
+    // "client_id": 3,
+    // "type_id": 2,
+    // "start_date": "2024-11-11T00:00:00.000Z",
+    // "end_date": "2024-11-11T00:00:00.000Z",
+    // "price": 200,
+    // "sessions_used": 2,
+    // "createdAt": "2024-11-11T13:07:00.571Z",
+    // "updatedAt": "2024-11-11T13:07:00.571Z"
 
 
 // {
-  // card_id
+  // memberships_id
   
-  //// card_type_id
+  //// type_id
+  //// type_name
   //// client_id
     // client_name
-    // card_type_name
 
-  // status
-  // start_date
-  // end_date
+    // start_date
+    // end_date
+    // price
+    // sessions_used
   
   // createdAt
   // updatedAt
@@ -174,7 +182,7 @@ export const Clubcards = () => {
     p: 4,
   };
  
-  const statuses = ['активный', 'средний', 'начальный', 'специальный'];
+  // const statuses = ['активный', 'средний', 'начальный', 'специальный'];
 
   // console.log('*************************************************************');
 
@@ -187,7 +195,7 @@ export const Clubcards = () => {
           color: '#141414',
           mb: 2,
         }}>
-        Клубные карты
+        Члены клуба
       </Typography>
       <Typography variant="h5" 
         sx={{
@@ -200,6 +208,19 @@ export const Clubcards = () => {
           </Fab>
         </Tooltip>
       </Typography>
+
+
+
+
+
+      </Container>
+    )
+  };
+  
+
+
+  /*
+
       { __cards.map((card) => (
         <Box key={card.card_id}
          sx={{ 
@@ -395,7 +416,5 @@ export const Clubcards = () => {
          </>
       }
 
-      </Container>
-    )
-  };
-  
+
+  */

@@ -21,6 +21,10 @@ export const useStoreOfYogaClub = create(devtools(immer((set) => ({
     result: [],
     error: ''
   },
+  memberships: {
+    result: [],
+    error: ''
+  },
   instructors: {
     result: [],
     error: ''
@@ -33,6 +37,7 @@ export const getAllClientsSelector = (state) => state.clients.result;
 export const getAllCardtypesSelector = (state) => state.cardtypes.result;
 export const getAllClubcardsSelector = (state) => state.clubcards.result;
 export const getAllMembershiptypesSelector = (state) => state.membershiptypes.result;
+export const getAllMembershipsSelector = (state) => state.memberships.result;
 export const getAllInstructorsSelector = (state) => state.instructors.result;
 export const getAllLogsSelector = (state) => state.logs;
 
