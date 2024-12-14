@@ -12,11 +12,13 @@ import Button from '@mui/material/Button';
 import { useStoreOfYogaClub, getAllCardtypesSelector } from '../../store';
 import { deleteEntity, editEntity } from '../../store';
 import { CardtypeModalNewItem } from './CardtypeModalNewItem';
+import { Error } from '../Error';
 
 export const Cardtypes = () => {
   const cardtypes = useStoreOfYogaClub(getAllCardtypesSelector);
 
   const [currentCardtype, setCurrentCardtype] = React.useState({});
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const [openModalNewItem, setOpenModalNewItem] = React.useState(false);
   const handleOpenModalNewItem = () => setOpenModalNewItem(true);
@@ -179,17 +181,30 @@ export const Cardtypes = () => {
              size={{ xs: 12, sm: 4, md: 2 }}
             >
               <Tooltip title="Изменить...">
-                <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee', zIndex: 0}}>
-                  <EditIcon onClick={() => handleOpenEditBlock(cardtype)}/>
+                <Fab
+                 size="small" 
+                 aria-label="edit" 
+                 sx={{backgroundColor: '#df87ee', zIndex: 0}}
+                 onClick={() => handleOpenEditBlock(cardtype)}
+                >
+                  <EditIcon />
                 </Fab>
               </Tooltip>
               <Tooltip title="Удалить...">
-                <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890', zIndex: 0}}>
-                  <DeleteIcon onClick={
-                    () => deleteEntity(cardtype.card_type_id, 'card_type_id', 'cardtypes')
-                      .then( _ => { console.log('+++++++ Запрос deleteEntity -- Cardtypes успешно завершен!')})
-                      .catch(error => { console.error('------- ОШИБКА запроса deleteEntity -- Cardtypes:', error)})
-                  }/>
+                <Fab
+                 size="small" 
+                 aria-label="delete" 
+                 sx={{backgroundColor: '#ff9890', zIndex: 0}}
+                 onClick={
+                  () => deleteEntity(cardtype.card_type_id, 'card_type_id', 'cardtypes')
+                    .then( _ => { console.log('+++++++ Запрос deleteEntity -- Cardtypes успешно завершен!')})
+                    .catch(error => { 
+                      console.error('------- ОШИБКА запроса deleteEntity -- Cardtypes:', error);
+                      setErrorMessage(error)
+                    })
+                }
+                >
+                  <DeleteIcon />
                 </Fab>
               </Tooltip>
             </Grid>

@@ -23,6 +23,7 @@ import {
 import { deleteEntity, editEntity} from '../../store';
 import { ClubcardModalNewItem } from './ClubcardModalNewItem';
 import { ClubcardModalInfo } from './ClubcardModalInfo';
+import { Error } from '../Error';
 
 export const Clubcards = () => {
   const clubcards = useStoreOfYogaClub(getAllClubcardsSelector);
@@ -50,6 +51,7 @@ export const Clubcards = () => {
   }
 
   const [currentClubcard, setCurrentClubcard] = React.useState({});
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const [openModalNewItem, setOpenModalNewItem] = React.useState(false);
   const handleOpenModalNewItem = () => setOpenModalNewItem(true);
@@ -260,22 +262,40 @@ export const Clubcards = () => {
              size={{ xs: 12, sm: 4, md: 2 }}
             >
               <Tooltip title="Изменить...">
-                <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee', zIndex: 0}}>
-                  <EditIcon onClick={() => handleOpenEditBlock(card)}/>
+                <Fab 
+                  size="small" 
+                  aria-label="edit" 
+                  sx={{backgroundColor: '#df87ee', zIndex: 0}}
+                  onClick={() => handleOpenEditBlock(card)}
+                >
+                  <EditIcon />
                 </Fab>
               </Tooltip>
               <Tooltip title="Удалить...">
-                <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890', zIndex: 0}}>
-                  <DeleteIcon onClick={
+                <Fab 
+                  size="small" 
+                  aria-label="delete" 
+                  sx={{backgroundColor: '#ff9890', zIndex: 0}}
+                  onClick={
                     () => deleteEntity(card.card_id, 'card_id', 'clubcards')
                       .then( _ => { console.log('+++++++ Запрос deleteEntity -- Clubcards успешно завершен!')})
-                      .catch(error => { console.error('------- ОШИБКА запроса deleteEntity -- Clubcards:', error)})
-                  }/>
+                      .catch(error => { 
+                        console.error('------- ОШИБКА запроса deleteEntity -- Clubcards:', error);
+                        setErrorMessage(error)
+                      })
+                  }
+                >
+                  <DeleteIcon />
                 </Fab>
               </Tooltip>
               <Tooltip title="Подробнее...">
-                <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b', zIndex: 0}}>
-                  <SendIcon onClick={() => handleOpenModalInfo(card)}/>
+                <Fab 
+                  size="small" 
+                  aria-label="send" 
+                  sx={{backgroundColor: '#ffeb3b', zIndex: 0}}
+                  onClick={() => handleOpenModalInfo(card)}
+                >
+                  <SendIcon />
                 </Fab>
               </Tooltip>
             </Grid>

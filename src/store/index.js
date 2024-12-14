@@ -29,6 +29,10 @@ export const useStoreOfYogaClub = create(devtools(immer((set) => ({
     result: [],
     error: ''
   },
+  sessions: {
+    result: [],
+    error: ''
+  },
   logs: [],
 }))))
 
@@ -39,6 +43,7 @@ export const getAllClubcardsSelector = (state) => state.clubcards.result;
 export const getAllMembershiptypesSelector = (state) => state.membershiptypes.result;
 export const getAllMembershipsSelector = (state) => state.memberships.result;
 export const getAllInstructorsSelector = (state) => state.instructors.result;
+export const getAllSessionsSelector = (state) => state.sessions.result;
 export const getAllLogsSelector = (state) => state.logs;
 
 

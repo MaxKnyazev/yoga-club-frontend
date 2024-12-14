@@ -18,11 +18,13 @@ import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import { Error } from '../Error';
 
 export const Clients = () => {
   const clients = useStoreOfYogaClub(getAllClientsSelector);
 
   const [currentClient, setCurrentClient] = React.useState({});
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const [openModalNewItem, setOpenModalNewItem] = React.useState(false);
   const handleOpenModalNewItem = () => setOpenModalNewItem(true);
@@ -209,23 +211,41 @@ export const Clients = () => {
              size={{ xs: 12, sm: 4, md: 2 }}
             >
               <Tooltip title="Изменить...">
-                <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee', zIndex: 0}}>
-                  <EditIcon onClick={() => handleOpenEditBlock(client)}/>
+                <Fab 
+                  size="small" 
+                  aria-label="edit" 
+                  sx={{backgroundColor: '#df87ee', zIndex: 0}}
+                  onClick={() => handleOpenEditBlock(client)}
+                >
+                  <EditIcon />
                 </Fab>
               </Tooltip>
               <Tooltip title="Удалить...">
-                <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890', zIndex: 0}}>
-                  <DeleteIcon onClick={
+                <Fab 
+                  size="small" 
+                  aria-label="delete" 
+                  sx={{backgroundColor: '#ff9890', zIndex: 0}}
+                  onClick={
                     () => deleteEntity(client.client_id, 'client_id', 'clients')
                       .then( _ => { console.log('+++++++ Запрос deleteEntity -- Clients успешно завершен!')})
-                      .catch(error => { console.error('------- ОШИБКА запроса deleteEntity -- Clients:', error)})
+                      .catch(error => { 
+                        console.error('------- ОШИБКА запроса deleteEntity -- Clients:', error);
+                        setErrorMessage(error)
+                      })
 
-                  }/>
+                  }
+                >
+                  <DeleteIcon />
                 </Fab>
               </Tooltip>
               <Tooltip title="Подробнее...">
-                <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b', zIndex: 0}}>
-                  <SendIcon onClick={() => handleOpenModalInfo(client)}/>
+                <Fab 
+                  size="small" 
+                  aria-label="send" 
+                  sx={{backgroundColor: '#ffeb3b', zIndex: 0}}
+                  onClick={() => handleOpenModalInfo(client)}
+                >
+                  <SendIcon />
                 </Fab>
               </Tooltip>
             </Grid>

@@ -1,13 +1,11 @@
 import React from 'react';
-import { Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
+import { Sessions } from '../components/sessions/Sessions';
 
 export const SessionsPage = () => {
   return (
     <Container>
-      <Typography variant="h5" sx={{textAlign: 'center', textTransform: 'uppercase'}}>
-        Записи о посещениях клуба
-      </Typography>
-
+      <Sessions />
     </Container>
   );
 };

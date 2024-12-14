@@ -38,8 +38,9 @@ export const App = () => {
     getEntityes('clubcards')
       .then( _ => { console.log('+++++++ Запрос /clubcards успешно завершен!')})
       .catch(error => { console.error('------- ОШИБКА clubcards /instructors:', error)});
-
-
+    getEntityes('sessions')
+      .then( _ => { console.log('+++++++ Запрос /sessions успешно завершен!')})
+      .catch(error => { console.error('------- ОШИБКА clubcards /sessions:', error)});
   }, []);
 
   const routes = [

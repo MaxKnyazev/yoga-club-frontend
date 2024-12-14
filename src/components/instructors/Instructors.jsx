@@ -25,6 +25,7 @@ import { useStoreOfYogaClub, getAllInstructorsSelector } from '../../store';
 import { deleteEntity, editEntity} from '../../store';
 import { InstructorModalNewItem } from './InstructorModalNewItem';
 import { InstructorModalInfo } from './InstructorModalInfo';
+import { Error } from '../Error';
 
 
   
@@ -34,6 +35,7 @@ export const Instructors = () => {
   const instructors = useStoreOfYogaClub(getAllInstructorsSelector);
 
   const [currentInstructor, setCurrentInstructor] = React.useState({});
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const [openModalNewItem, setOpenModalNewItem] = React.useState(false);
   const handleOpenModalNewItem = () => setOpenModalNewItem(true);
@@ -214,22 +216,40 @@ export const Instructors = () => {
              size={{ xs: 12, sm: 4, md: 2 }}
             >
               <Tooltip title="Изменить...">
-                <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee', zIndex: 0}}>
-                  <EditIcon onClick={() => handleOpenEditBlock(instructor)}/>
+                <Fab 
+                  size="small" 
+                  aria-label="edit" 
+                  sx={{backgroundColor: '#df87ee', zIndex: 0}}
+                  onClick={() => handleOpenEditBlock(instructor)}
+                >
+                  <EditIcon />
                 </Fab>
               </Tooltip>
               <Tooltip title="Удалить...">
-                <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890', zIndex: 0}}>
-                  <DeleteIcon onClick={
+                <Fab 
+                  size="small" 
+                  aria-label="delete" 
+                  sx={{backgroundColor: '#ff9890', zIndex: 0}}
+                  onClick={
                     () => deleteEntity(instructor.instructor_id, 'instructor_id', 'instructors')
                       .then( _ => { console.log('+++++++ Запрос deleteEntity -- Instructors успешно завершен!')})
-                      .catch(error => { console.error('------- ОШИБКА запроса deleteEntity -- Instructors:', error)})
-                  }/>
+                      .catch(error => { 
+                        console.error('------- ОШИБКА запроса deleteEntity -- Instructors:', error);
+                        setErrorMessage(error)
+                      })
+                  }
+                >
+                  <DeleteIcon />
                 </Fab>
               </Tooltip>
               <Tooltip title="Подробнее...">
-                <Fab size="small" aria-label="send" sx={{backgroundColor: '#ffeb3b', zIndex: 0}}>
-                  <SendIcon onClick={() => handleOpenModalInfo(instructor)}/>
+                <Fab 
+                  size="small" 
+                  aria-label="send" 
+                  sx={{backgroundColor: '#ffeb3b', zIndex: 0}}
+                  onClick={() => handleOpenModalInfo(instructor)}
+                >
+                  <SendIcon />
                 </Fab>
               </Tooltip>
             </Grid>

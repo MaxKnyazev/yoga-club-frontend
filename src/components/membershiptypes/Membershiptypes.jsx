@@ -12,11 +12,13 @@ import Button from '@mui/material/Button';
 import { useStoreOfYogaClub, getAllMembershiptypesSelector } from '../../store';
 import { deleteEntity, editEntity } from '../../store';
 import { MembershiptypeModalNewItem } from './MembershiptypeModalNewItem';
+import { Error } from '../Error';
 
 export const Membershiptypes = () => {
   const membershiptypes = useStoreOfYogaClub(getAllMembershiptypesSelector);
 
   const [currentMembershiptype, setCurrentMembershiptype] = React.useState({});
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const [openModalNewItem, setOpenModalNewItem] = React.useState(false);
   const handleOpenModalNewItem = () => setOpenModalNewItem(true);
@@ -172,17 +174,30 @@ export const Membershiptypes = () => {
              size={{ xs: 12, sm: 4, md: 2 }}
             >
               <Tooltip title="Изменить...">
-                <Fab size="small" aria-label="edit" sx={{backgroundColor: '#df87ee', zIndex: 0}}>
-                  <EditIcon onClick={() => handleOpenEditBlock(membershiptype)}/>
+                <Fab 
+                  size="small" 
+                  aria-label="edit" 
+                  sx={{backgroundColor: '#df87ee', zIndex: 0}}
+                  onClick={() => handleOpenEditBlock(membershiptype)}
+                >
+                  <EditIcon />
                 </Fab>
               </Tooltip>
               <Tooltip title="Удалить...">
-                <Fab size="small" aria-label="delete" sx={{backgroundColor: '#ff9890', zIndex: 0}}>
-                  <DeleteIcon onClick={
+                <Fab 
+                  size="small" 
+                  aria-label="delete" 
+                  sx={{backgroundColor: '#ff9890', zIndex: 0}}
+                  onClick={
                     () => deleteEntity(membershiptype.type_id, 'type_id', 'membershiptypes')
                       .then( _ => { console.log('+++++++ Запрос deleteEntity -- Membershiptypes успешно завершен!')})
-                      .catch(error => { console.error('------- ОШИБКА запроса deleteEntity -- Membershiptypes:', error)})
-                  }/>
+                      .catch(error => { 
+                        console.error('------- ОШИБКА запроса deleteEntity -- Membershiptypes:', error);
+                        setErrorMessage(error)
+                    })
+                  }
+                >
+                  <DeleteIcon />
                 </Fab>
               </Tooltip>
             </Grid>
