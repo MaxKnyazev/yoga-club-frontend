@@ -164,6 +164,7 @@ export const Clients = () => {
         </Tooltip>
       </Typography>
 
+      {errorMessage && <Error setErrorMessage={setErrorMessage} errorMessage={`${errorMessage}`}/>}
       { clients.map((client) => (
         <Box key={client.client_id}
          sx={{ 

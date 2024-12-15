@@ -171,6 +171,7 @@ export const Instructors = () => {
           </Fab>
         </Tooltip>
       </Typography>
+      {errorMessage && <Error setErrorMessage={setErrorMessage} errorMessage={`${errorMessage}`}/>}
       { instructors.map((instructor) => (
         <Box key={instructor.instructor_id}
          sx={{ 

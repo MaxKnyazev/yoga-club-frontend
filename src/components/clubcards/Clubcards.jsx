@@ -202,6 +202,7 @@ export const Clubcards = () => {
           </Fab>
         </Tooltip>
       </Typography>
+      {errorMessage && <Error setErrorMessage={setErrorMessage} errorMessage={`${errorMessage}`}/>}
       { __cards.map((card) => (
         <Box key={card.card_id}
          sx={{ 

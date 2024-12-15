@@ -126,6 +126,7 @@ export const Membershiptypes = () => {
           </Fab>
         </Tooltip>
       </Typography>
+      {errorMessage && <Error setErrorMessage={setErrorMessage} errorMessage={`${errorMessage}`}/>}
       { membershiptypes.map((membershiptype) => (
         <Box key={membershiptype.type_id}
          sx={{ 

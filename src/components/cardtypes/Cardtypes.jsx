@@ -133,6 +133,7 @@ export const Cardtypes = () => {
         </Tooltip>
       </Typography>
 
+      {errorMessage && <Error setErrorMessage={setErrorMessage} errorMessage={`${errorMessage}`}/>}
       { cardtypes.map((cardtype) => (
         <Box key={cardtype.card_type_id}
          sx={{ 
